@@ -1,0 +1,13 @@
+{
+    "name": "PlantId",
+    "alias": "plantid",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\PlantId\\Providers\\PlantIdServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
