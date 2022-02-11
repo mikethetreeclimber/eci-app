@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@admin.com',
                 'email_verified_at' => now(),
                 'password' => bcrypt('admin123'),
+                'current_team_id' => 1
             ],
         );
 
@@ -29,13 +30,14 @@ class DatabaseSeeder extends Seeder
                 'email' => 'mikethetreeclimber@gmail.com',
                 'email_verified_at' => now(),
                 'password' => bcrypt('tree0420'),
+                'current_team_id' => 1
             ],
         );
        
         \App\Models\Team::create(
             [
                 'user_id' => 1,
-                'name' => 'Admins',
+                'name' => 'Admin\'s Team',
                 'personal_team' => 0,
             ],
         );
