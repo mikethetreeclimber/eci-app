@@ -5,6 +5,7 @@ namespace Modules\Crm\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Crm\Entities\Circuit;
 
 class CrmController extends Controller
 {
@@ -41,9 +42,11 @@ class CrmController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function show(Circuit $circuit)
     {
-        return view('crm::show');
+        return view('crm::show', [
+            'circuit' => $circuit
+        ]);
     }
 
     /**

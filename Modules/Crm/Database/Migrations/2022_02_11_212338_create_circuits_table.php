@@ -20,6 +20,7 @@ class CreateCircuitsTable extends Migration
             $table->string('city');
             $table->foreignIdFor(User::class, 'user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

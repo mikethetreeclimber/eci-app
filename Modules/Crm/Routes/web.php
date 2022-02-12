@@ -14,6 +14,9 @@ use Modules\Crm\Http\Controllers\CrmController;
 |
 */
 
-Route::prefix('crm')->as('crm.')->group(function() {
-    Route::get('/', [CrmController::class, 'index'])->name('index');
+Route::middleware('auth')
+    ->prefix('crm')->as('crm.')
+        ->group(function() {
+            Route::get('/', [CrmController::class, 'index'])->name('index');
+            Route::get('/{circuit:circuit_name}', [CrmController::class, 'show'])->name('show');
 });

@@ -17,17 +17,17 @@
 
                         <input type="text" wire:model="circuit_name" id="circuit_name"
                             class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                            placeholder="GreenWood 2801">
+                            placeholder="Circuit Name">
                     </div>
                 </div>
             </div>
             <div class="col-span-6 md:col-span-3 grid grid-cols-3 gap-6">
                 <div class="col-span-3 ">
-                    <label for="circuit_city" class="block text-sm font-medium text-gray-700"> Circuit Town/City </label>
+                    <label for="city" class="block text-sm font-medium text-gray-700"> Circuit Town/City </label>
                     <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="text" wire:model="circuit_city" id="circuit_city"
+                        <input type="text" wire:model="city" id="city"
                             class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                            placeholder="Tamaqua">
+                            placeholder="Town/City">
                     </div>
                 </div>
             </div>
