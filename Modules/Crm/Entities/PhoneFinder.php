@@ -5,14 +5,14 @@ namespace Modules\Crm\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Contacts extends Model
+class PhoneFinder extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
     
-    public function customers()
-    {
-        return $this->belongsTo(Customers::class);
-    }
+    // public function customers()
+    // {
+    //     return $this->hasOne(Customers::class);
+    // }
 }

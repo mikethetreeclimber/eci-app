@@ -2,6 +2,10 @@
 
 namespace Modules\Crm\Http\Livewire\Circuit;
 
+use Illuminate\Queue\Events\JobProcessing;
+use Illuminate\Queue\Jobs\Job;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Queue;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -28,6 +32,7 @@ class ImportMailingList extends Component
     public function mount()
     {
         $this->getCustomers();
+   
     }
 
     public function updatingMailing($value)
@@ -77,11 +82,11 @@ class ImportMailingList extends Component
             ['contacts' => 'required|mimes:xls,xlsx'],
         )->validate();
     }
-
+// TODO: seperate to own component
     public function updatedContacts()
     {
         $file = Storage::put('/public', $this->contacts);
-        ImportContactsJob::dispatch($file);
+        Excel::import(new ContactListImport(), $file);
         sleep(5);
         session()->flash('flash.banner', 'Contacts Successfully Added');
         session()->flash('flash.bannerStyle', 'success');

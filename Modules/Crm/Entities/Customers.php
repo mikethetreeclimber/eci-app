@@ -11,6 +11,15 @@ class Customers extends Model
 
     protected $guarded = [];
 
+    public function contacts()
+    {
+        return $this->hasOne(Contacts::class);
+    }
+
+    public function phone()
+    {
+        return $this->belongsTo(PhoneFinder::class, 'phone_finder_id');
+    }
     public function getNameAttribute($value)
     {
         return "{$this->first_name} {$this->last_name}";

@@ -2,14 +2,16 @@
 
 namespace Modules\Crm\Imports;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Modules\Crm\Entities\Circuit;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Modules\Crm\Entities\Contacts;
 
-class ContactListImport implements ToModel, WithHeadingRow
+class ContactListImport implements ToModel, WithHeadingRow, ShouldQueue, WithChunkReading
 {
     public function model(array $row)
     {
@@ -33,5 +35,10 @@ class ContactListImport implements ToModel, WithHeadingRow
                 'revenue_class_desc' => $row['revenue_class_desc']
             ]);
         
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 }

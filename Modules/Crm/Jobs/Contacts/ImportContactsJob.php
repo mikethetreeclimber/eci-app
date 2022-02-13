@@ -32,6 +32,8 @@ class ImportContactsJob implements ShouldQueue
      */
     public function handle()
     {
-        Excel::import(new ContactListImport(), $this->file);
+        
+        return ;
+       
     }
 }

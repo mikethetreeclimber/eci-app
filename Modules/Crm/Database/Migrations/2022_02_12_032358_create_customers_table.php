@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Modules\Crm\Entities\Circuit;
+use Modules\Crm\Entities\Contacts;
+use Modules\Crm\Entities\PhoneFinder;
 
 class CreateCustomersTable extends Migration
 {
@@ -18,7 +20,9 @@ class CreateCustomersTable extends Migration
             $table->id();
             $table->foreignIdFor(Circuit::class, 'circuit_id')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');;
+                ->onDelete('cascade');
+            $table->foreignIdFor(PhoneFinder::class,'phone_finder_id')->nullable();
+            $table->foreignIdFor(Contacts::class,'contacts_id')->nullable();
             $table->string('title')->nullable();
             $table->string('work_order')->nullable();
             $table->string('first_name')->nullable();

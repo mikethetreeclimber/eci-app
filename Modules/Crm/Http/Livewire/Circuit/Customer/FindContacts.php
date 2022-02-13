@@ -4,14 +4,18 @@ namespace Modules\Crm\Http\Livewire\Circuit\Customer;
 
 use Fuse\Fuse;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 use Modules\Crm\Entities\Contacts;
 use Modules\Crm\Entities\Customers;
+use Illuminate\Support\Facades\Http;
+use Modules\Crm\Entities\PhoneFinder;
 use Modules\Crm\Http\Livewire\Services\AddressSanitizer;
 
 class FindContacts extends Component
 {
     public $customer;
     public $circuit;
+    public $phoneFinder;
     public $fuzzySearchComplete = false;
     public $possibleContacts = [];
 
@@ -39,11 +43,15 @@ class FindContacts extends Component
             'includeScore' => true,
             'keys' => ['customer_name'],
         ];
-        $contacts = collect(Contacts::get(['customer_name', 'service_address', 'primary_phone', 'alt_phone']))->flatten()->toArray();
-        $fuseAddress  = new Fuse($contacts, $addressOptions);
+
+        $contactsByName = Contacts::select()->where('customer_name', 'LIKE','%'.$this->customer->last_name)->get();
+        $contactsByAddress = Contacts::select()->where('mailing_address', 'LIKE', '%'.$this->customer->mailing_address.'%')
+            ->get();
+            
+        $fuseAddress  = new Fuse($contactsByAddress->flatten()->toArray(), $addressOptions);
         $fuzzyAddressSearch = $fuseAddress->search($this->customer->service_address);
 
-        $fuseName  = new Fuse($contacts, $nameOptions);
+        $fuseName  = new Fuse($contactsByName->flatten()->toArray(), $nameOptions);
         $fuzzyNameSearch = $fuseName->search($this->customer->name);
         if ($fuzzyNameSearch !== []) {
             foreach ($fuzzyNameSearch as $search) {
@@ -64,24 +72,33 @@ class FindContacts extends Component
         if ($this->possibleContacts['byAddress'] !== [] && $this->possibleContacts['byName'] !== []) {
             foreach ($this->possibleContacts['byAddress'] as $byAddress) {
                 foreach ($this->possibleContacts['byName'] as $byName) {
-                    if ($byAddress['service_address'] === $byName['service_address']) {
+                    if ($byAddress['service_address'] == $byName['service_address']) {
                         $this->possibleContacts['bestResults'][] = $byName;
                     }
                 }
+            }
+        } elseif ($this->possibleContacts['byAddress'] !== []) {
+            foreach ($this->possibleContacts['byAddress'] as $byAddress) {
+                $this->possibleContacts['bestResults'][] = $byAddress;
+                dd($this->possibleContacts);
+
             }
         } elseif ($this->possibleContacts['byName'] !== []) {
             foreach ($this->possibleContacts['byName'] as $byName) {
                 $this->possibleContacts['bestResults'][] = $byName;
             }
-        } elseif ($this->possibleContacts['byAddress'] !== []) {
-            foreach ($this->possibleContacts['byAddress'] as $byAddress) {
-                $this->possibleContacts['bestResults'][] = $byAddress;
-            }
-        };
+         }else{
+            $this->possibleContacts['bestResults'] = [];
+         };
+
         $this->fuzzySearchComplete = false;
         sleep(1);
         $this->emit('possibleContacts', $this->possibleContacts);
     }
+
+    
+
+    
 
     public function render()
     {
