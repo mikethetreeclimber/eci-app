@@ -23,7 +23,7 @@
             {{-- <div class="w-full flex items-center justify-between p-6 space-x-6"> --}}
             @if ($phoneFinder == [])
                 <div class="flex-1 w-full h-full">
-                    <div class="text-4xl text-orange-700 animate-bounce"> No Results From datafinder</div>
+                    <div class="text-4xl text-orange-700 bg-orange-200 animate-bounce"><button wire:click="phoneFinder" class="w-36 h-48"> Click To Search Data Finder</button></div>
                 </div>
             @endif
             @if ($phoneFinder !== [])

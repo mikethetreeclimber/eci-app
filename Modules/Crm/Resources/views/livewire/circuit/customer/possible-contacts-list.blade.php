@@ -17,7 +17,7 @@
                                            
                                             <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                                                 <div>
-                                                    <p class="text-sm font-medium text-indigo-600 truncate">{{ $possibleContact['customer_name'] }}</p>
+                                                    <p class="text-sm font-medium text-green-600 truncate">{{ $possibleContact['customer_name'] }}</p>
                                                     <p class="mt-2 flex items-center text-sm text-gray-500">
                                                         <!-- Heroicon name: solid/mail -->
                                                         {{ $possibleContact['service_address'] }}
@@ -58,7 +58,7 @@
                             </li>
 
                             {{-- <li class="py-5">
-                                <div class="relative focus-within:ring-2 focus-within:ring-indigo-500">
+                                <div class="relative focus-within:ring-2 focus-within:ring-green-500">
                                     <h3 class="text-sm font-semibold text-gray-800">
                                         <a href="#" class="hover:underline focus:outline-none">
                                             <!-- Extend touch target to entire panel -->
@@ -103,7 +103,7 @@
                         @endforeach
                     @else
                         <li class="py-5">
-                            <div class="relative focus-within:ring-2 focus-within:ring-indigo-500">
+                            <div class="relative focus-within:ring-2 focus-within:ring-green-500">
                                 <h3 class="text-xl font-semibold text-gray-800">
                                     No Contacts Found
                                 </h3>

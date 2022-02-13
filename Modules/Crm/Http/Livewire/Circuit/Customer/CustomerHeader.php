@@ -17,7 +17,7 @@ class CustomerHeader extends Component
     public function mount(Customers $customer)
     {
         $this->customer = $customer;
-        $this->phoneFinder();
+        // $this->phoneFinder();
     }
 
     public function phoneFinder()
@@ -26,7 +26,7 @@ class CustomerHeader extends Component
 
             $url = 'https://api.datafinder.com/v2/qdf.php';
             $params = [
-                'k2' => 'gvjgp8riixap1gcmdzw8vjot',
+                'k2' => env('DATAFINDER_API'),
                 'service' => 'phone',
                 'd_fulladdr' => $this->customer->mailing_address,
                 'd_city' => $this->customer->city,
