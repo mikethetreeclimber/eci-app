@@ -36,6 +36,12 @@ class PossibleContactsList extends Component
         $this->possibleContacts($this->allContacts);
         
     }
+
+    public function verify()
+    {
+        //
+    }
+    
     public function render()
     {
         return view('crm::livewire.circuit.customer.possible-contacts-list');

@@ -1,17 +1,17 @@
     <div class="max-w-screen mx-auto sm:px-6 lg:px-8">
-        @if ($searchBy == 'byName')
-            <x-button wire:click='searchBestResults'> Search Best Results </x-button>
-        @endif
-        @if ($searchBy == 'bestResults')
-            <x-button wire:click='searchByName'> Search By Last Name </x-button>
-        @endif
+        {{-- @if ($searchBy == 'byName') --}}
+            {{-- <x-button wire:click='searchBestResults'> Search Best Results </x-button> --}}
+        {{-- @endif --}}
+        {{-- @if ($searchBy == 'bestResults') --}}
+            {{-- <x-button wire:click='searchByName'> Search By Last Name </x-button> --}}
+        {{-- @endif --}}
         <div class="bg-white shadow overflow-hidden sm:rounded-md">
             <ul role="list" class="divide-y divide-gray-200">
                 @if ($fuzzySearchSent === true)
                     @if ($possibleContacts !== [])
                         @foreach ($possibleContacts as $possibleContact)
                             <li>
-                                <a href="#" class="block hover:bg-gray-50">
+                                <button type="button" wire:click="verify" class="w-full block hover:bg-green-300 hover:bg-opacity-60">
                                     <div class="flex items-center px-4 py-4 sm:px-6">
                                         <div class="min-w-0 flex-1 flex items-center">
                                            
@@ -25,11 +25,19 @@
                                                 </div>
                                                 <div class="block">
                                                     <div>
+                                                        <p class="mt-2 flex items-center text-sm text-gray-500">
+                                                            Primary Phone
+                                                        </p>
                                                         <p class="text-sm text-gray-900">
                                                             {{ $possibleContact['primary_phone'] }}
-                                                            {{ $possibleContact['alt_phone'] }}
                                                         </p>
                                                         <p class="mt-2 flex items-center text-sm text-gray-500">
+                                                            Alt Phone
+                                                        </p>
+                                                        <p class="text-sm text-gray-900">
+                                                            {{ $possibleContact['alt_phone'] }}
+                                                        </p>
+                                                        {{-- <p class="mt-2 flex items-center text-sm text-gray-500">
                                                             <!-- Heroicon name: solid/check-circle -->
                                                             <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
                                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -37,9 +45,9 @@
                                                                 <path fill-rule="evenodd"
                                                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                                                     clip-rule="evenodd" />
-                                                            </svg>
+                                                            </svg> 
                                                             Completed phone screening
-                                                        </p>
+                                                        </p> --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -54,7 +62,7 @@
                                             </svg>
                                         </div>
                                     </div>
-                                </a>
+                                </button>
                             </li>
 
                             {{-- <li class="py-5">

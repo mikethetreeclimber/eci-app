@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Modules\Crm\Entities\Contacts;
 
-class ContactListImport implements ToModel, WithHeadingRow, ShouldQueue, WithChunkReading
+class ContactListImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
@@ -36,9 +36,10 @@ class ContactListImport implements ToModel, WithHeadingRow, ShouldQueue, WithChu
             ]);
         
     }
-
-    public function chunkSize(): int
-    {
-        return 1000;
-    }
+// TODO: FIgure out how to que file import to imprt large files
+    // public function chunkSize(): int
+    // {
+    //     return 100;
+    // ShouldQueue, WithChunkReading
+    // }
 }

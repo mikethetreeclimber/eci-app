@@ -70,7 +70,8 @@ class ImportMailingList extends Component
 
     public function updatedMailing()
     {
-        Excel::import(new MailingListImport($this->circuit), $this->mailing->getRealPath());
+        $file = Storage::put('/public', $this->mailing);
+        Excel::import(new MailingListImport($this->circuit), $file);
 
         $this->getCustomers();
     }
@@ -87,10 +88,10 @@ class ImportMailingList extends Component
     {
         $file = Storage::put('/public', $this->contacts);
         Excel::import(new ContactListImport(), $file);
-        sleep(5);
-        session()->flash('flash.banner', 'Contacts Successfully Added');
-        session()->flash('flash.bannerStyle', 'success');
-        $this->redirectRoute('crm.show', ['circuit' => $this->circuit]);
+        // // sleep(5);
+        // session()->flash('flash.banner', 'Contacts Successfully Added');
+        // session()->flash('flash.bannerStyle', 'success');
+        // $this->redirectRoute('crm.show', ['circuit' => $this->circuit]);
         
     }
 

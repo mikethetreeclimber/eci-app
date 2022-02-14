@@ -4,9 +4,11 @@ namespace Modules\Crm\Imports;
 
 use Modules\Crm\Entities\Circuit;
 use Modules\Crm\Entities\Station;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Modules\Crm\Entities\Customers;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Modules\Crm\Http\Livewire\Services\AddressSanitizer;
 
 class MailingListImport implements ToModel, WithHeadingRow
@@ -38,4 +40,12 @@ class MailingListImport implements ToModel, WithHeadingRow
             'assessed_date' => $row['assessed_date'],
         ]);
     }
+    
+// TODO: FIgure out how to que file import to imprt large files
+
+    // public function chunkSize(): int
+    // {
+    //     , ShouldQueue, WithChunkReading
+    //     return 100;
+    // }
 }

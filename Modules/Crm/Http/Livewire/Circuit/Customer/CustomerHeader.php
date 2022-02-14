@@ -13,6 +13,7 @@ class CustomerHeader extends Component
     public $phoneFinder = [];
     public $customer;
     public $searching = true;
+    public $possibleContacts = [];
 
     public function mount(Customers $customer)
     {
