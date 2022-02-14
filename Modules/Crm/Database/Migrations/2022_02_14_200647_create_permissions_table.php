@@ -1,11 +1,12 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Modules\Crm\Entities\Circuit;
+use Modules\Crm\Entities\Customers;
 
-class CreateCircuitsTable extends Migration
+class CreatePermissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +15,12 @@ class CreateCircuitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('circuits', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'user_id');
-            $table->string('circuit_name');
-            $table->string('city');
+            $table->foreignIdFor(Circuit::class, 'circuit_id');
+            $table->foreignIdFor(Customers::class, 'customer_id');
+            $table->string('permission_status')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -31,6 +31,6 @@ class CreateCircuitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('circuits');
+        Schema::dropIfExists('permissions');
     }
 }

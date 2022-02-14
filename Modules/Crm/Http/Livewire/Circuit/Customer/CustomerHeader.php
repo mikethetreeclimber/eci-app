@@ -3,6 +3,7 @@
 namespace Modules\Crm\Http\Livewire\Circuit\Customer;
 
 use Livewire\Component;
+use Modules\Crm\Entities\Circuit;
 use Modules\Crm\Entities\Customers;
 use Illuminate\Support\Facades\Http;
 use Modules\Crm\Entities\PhoneFinder;
@@ -12,13 +13,18 @@ class CustomerHeader extends Component
 {
     public $phoneFinder = [];
     public $customer;
+    public $circuit;
     public $searching = true;
     public $possibleContacts = [];
 
-    public function mount(Customers $customer)
+    public function mount(Customers $customer, Circuit $circuit)
     {
         $this->customer = $customer;
+        $this->circuit = $circuit;
         // $this->phoneFinder();
+        if ($this->customer->phone !== null && $this->customer->phone !== 0){
+            $this->phoneFinder = $this->customer->phone;
+        }
     }
 
     public function phoneFinder()
@@ -35,14 +41,18 @@ class CustomerHeader extends Component
                 'd_lastname' => $this->customer->last_name,
                 'd_firstname' => $this->customer->first_name
             ];
-
-            $response = Http::withHeaders([
-                'content-type' => 'text/javascript; charset=utf8',
-            ])->get($url, $params)->json();
+            try {
+                $response = Http::withHeaders([
+                    'content-type' => 'text/javascript; charset=utf8',
+                ])->get($url, $params)->json();
+            } catch (\Throwable $th) {
+                
+            }
+            
             if ($response['datafinder']['num-results'] === 1) {
                 $this->phoneFinder = PhoneFinder::create([
                     'first_name' => $response['datafinder']['results'][0]['FirstName'],
-                    'middle_name' => $response['datafinder']['results'][0]['MiddleName'],
+                    // 'middle_name' => $response['datafinder']['results'][0]['MiddleName'],
                     'last_name' => $response['datafinder']['results'][0]['LastName'],
                     'address' => $response['datafinder']['results'][0]['Address'],
                     'city' => $response['datafinder']['results'][0]['City'],
@@ -59,14 +69,20 @@ class CustomerHeader extends Component
                     'phone_finder_id' => $this->phoneFinder->id
                 ]);
             }
+            
 
             if ($response['datafinder']['num-results'] == "0") {
                 $this->phoneFinder = [];
+                $this->customer->update([
+                    'phone_finder_id' => 0
+                ]);
             } 
+            session()->flash('flash.banner', 'Data Finder Found Results');
+            session()->flash('flash.bannerStyle', 'success');
+            $this->redirectRoute('crm.customer.show', ['customer' => $this->customer, 'circuit' => $this->circuit]);
         }
-        if ($this->customer->phone !== null){
-            $this->phoneFinder = $this->customer->phone;
-        }
+
+        
     }
     public function render()
     {

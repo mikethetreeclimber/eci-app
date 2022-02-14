@@ -28,6 +28,7 @@ class CreateContactsTable extends Migration
             $table->string('alt_phone')->nullable();
             $table->string('email_address')->nullable();
             $table->string('revenue_class_desc')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

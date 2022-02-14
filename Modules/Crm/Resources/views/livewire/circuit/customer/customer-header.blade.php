@@ -10,11 +10,13 @@
                 </div>
                 <span class="text-sm text-gray-500">Service Address:</span>
                 <p class="mx-1 text-gray-700 text-sm truncate">
-                    {{ ucwords(strtolower(Str::before($customer->service_address, ','))) }}, {{ Str::after($customer->service_address, ',') }}
+                    {{ ucwords(strtolower(Str::before($customer->service_address, ','))) }},
+                    {{ Str::after($customer->service_address, ',') }}
                 </p>
                 <span class="text-sm text-gray-500">Mailing Address:</span>
                 <p class="myx-1 text-gray-700 text-sm truncate">
-                    {{ ucwords(strtolower(Str::before($customer->full_mailing_address, ','))) }}, {{ Str::after($customer->full_mailing_address, ',') }}
+                    {{ ucwords(strtolower(Str::before($customer->full_mailing_address, ','))) }},
+                    {{ Str::after($customer->full_mailing_address, ',') }}
                 </p>
             </div>
         </div>
@@ -22,7 +24,7 @@
     {{-- < class="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"> --}}
     {{-- < class="w-full flex items-center justify-between p-6 space-x-6"> --}}
     <li class="bg-white rounded-lg shadow divide-y divide-gray-200">
-        @if ($phoneFinder == [])
+        @if ($customer->phone == null)
             <div class="w-full flex items-center justify-between p-6 space-x-6">
                 <div class="flex-1 justify-center text-center">
                     <div class="flex justify-center items-center space-x-3 mb-3">
@@ -41,23 +43,43 @@
                 </div>
             </div>
         @endif
-        @if ($phoneFinder !== [])
+        @if ($customer->phone === 0)
+            <div class="w-full flex items-center justify-between p-6 space-x-6">
+                <div class="flex-1 justify-center text-center">
+                    <div class="flex justify-center items-center space-x-3 mb-3">
+                        Data Finder Has No Results
+                    </div>
+                    <span class="mt-3 text-xs text-gray-500">Powered By</span>
+                    <p class="text-gray-700 text-sm truncate">
+                        <x-nav-link href="https://datafinder.com">DataFinder API</x-nav-link>
+                    </p>
+                </div>
+            </div>
+        @endif
+        @if ($customer->phone !== null)
             <div class="w-full flex items-center justify-between p-6 space-x-6">
                 <div class="flex-1 truncate">
                     <div class="flex items-center space-x-3">
-                        <h3 class="text-gray-900 text-md font-bold truncate">{{ $phoneFinder->first_name }}
-                            {{ $phoneFinder->last_name }}</h3>
+                        <h3 class="text-gray-900 text-md font-bold truncate">{{ $customer->phone->first_name }}
+                            {{ $customer->phone->last_name }}</h3>
                     </div>
                     <span class="text-xs text-gray-500">Phone:</span>
                     <p class="mt-1 text-gray-700 text-sm truncate">
-                        {{ $phoneFinder->phone }}
+                        {{ $customer->phone->phone }}
                     </p>
                     <span class="text-xs text-gray-500">Address:</span>
                     <p class="mt-1 text-gray-700 text-sm truncate">
-                        {{ $phoneFinder->address }}
-                        {{ $phoneFinder->city }},
-                        {{ $phoneFinder->state }}
+                        {{ $customer->phone->address }}
+                        {{ $customer->phone->city }},
+                        {{ $customer->phone->state }}
                     </p>
+                    <div class="flex items-center">
+                        <span class="mt-3 text-xs text-gray-500">Powered By
+                        <p class="text-gray-700 text-sm truncate">
+                            <x-nav-link href="https://datafinder.com">DataFinder API</x-nav-link>
+                        </p>
+                    </span>
+                    </div>
                 </div>
             </div>
         @endif

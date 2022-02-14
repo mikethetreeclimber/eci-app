@@ -7,11 +7,13 @@ use Modules\Crm\Entities\Station;
 use Modules\Crm\Entities\Customers;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Modules\Crm\Http\Livewire\Services\AddressSanitizer;
 
-class MailingListImport implements ToModel, WithHeadingRow
+class MailingListImport implements ToCollection, WithHeadingRow
 {
     public $circuitId;
 
@@ -20,28 +22,30 @@ class MailingListImport implements ToModel, WithHeadingRow
         $this->circuitId = $circuit->id;
     }
 
-    public function model(array $row)
+    public function collection(Collection $rows)
     {
-        return new Customers([
-            'circuit_id' => $this->circuitId,
-            'title' => $row['title'],
-            'work_order' => $row['work_order'],
-            'first_name' => $row['firstname'],
-            'last_name' => $row['lastname'],
-            'mailing_address' => AddressSanitizer::sanitize($row['mailing_address']),
-            'city' => $row['city'],
-            'state' => $row['state'],
-            'physical_address' => AddressSanitizer::sanitize($row['physical_address']),
-            'physical_city' => $row['physical_city'],
-            'physical_state' => $row['physical_state'],
-            'station_name' => $row['station_name'],
-            'unit' => $row['unit'],
-            'permission_status' => $row['permission_status'],
-            'assessed_date' => $row['assessed_date'],
-        ]);
+        return $rows->each(function ($row) {
+             Customers::create([
+                'circuit_id' => $this->circuitId,
+                'title' => $row['title'],
+                'work_order' => $row['work_order'],
+                'first_name' => $row['firstname'],
+                'last_name' => $row['lastname'],
+                'mailing_address' => AddressSanitizer::sanitize($row['mailing_address']),
+                'city' => $row['city'],
+                'state' => $row['state'],
+                'physical_address' => AddressSanitizer::sanitize($row['physical_address']),
+                'physical_city' => $row['physical_city'],
+                'physical_state' => $row['physical_state'],
+                'station_name' => $row['station_name'],
+                'unit' => $row['unit'],
+                'permission_status' => $row['permission_status'],
+                'assessed_date' => $row['assessed_date'],
+            ]);
+        });
     }
-    
-// TODO: FIgure out how to que file import to imprt large files
+
+    // TODO: FIgure out how to que file import to imprt large files
 
     // public function chunkSize(): int
     // {

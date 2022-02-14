@@ -18,6 +18,6 @@ Route::middleware('auth')
     ->prefix('crm')->as('crm.')
         ->group(function() {
             Route::get('/', [CrmController::class, 'index'])->name('index');
-            Route::get('/{circuit:circuit_name}', [CrmController::class, 'show'])->name('show');
-            Route::get('/{circuit:circuit_name}/customer/{customer}', [CrmController::class, 'showCustomer'])->name('customer.show');
+            Route::get('circuit/{circuit}', [CrmController::class, 'show'])->name('show');
+            Route::get('circuit/{circuit}/customer/{customer}', [CrmController::class, 'showCustomer'])->name('customer.show');
 });

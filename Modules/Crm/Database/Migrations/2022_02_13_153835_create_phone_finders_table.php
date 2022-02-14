@@ -16,8 +16,7 @@ class CreatePhoneFindersTable extends Migration
     {
         Schema::create('phone_finders', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Customers::class, 'customer_id')->nullable();
-            $table->string('first_name')->nullable();
+            $table->string('first_name')->nullable(); 
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('address')->nullable();
@@ -29,6 +28,7 @@ class CreatePhoneFindersTable extends Migration
             $table->string('phone')->nullable();
             $table->string('time_stamp')->nullable();
             $table->string('line_type')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
