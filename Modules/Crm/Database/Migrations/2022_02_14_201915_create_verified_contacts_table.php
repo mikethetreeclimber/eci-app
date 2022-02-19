@@ -1,11 +1,12 @@
 <?php
 
+use Modules\Crm\Entities\Circuit;
+use Modules\Crm\Entities\Contacts;
+use Modules\Crm\Entities\Customers;
+use Modules\Crm\Entities\PhoneFinder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Modules\Crm\Entities\Circuit;
-use Modules\Crm\Entities\Contacts;
-use Modules\Crm\Entities\PhoneFinder;
 
 class CreateVerifiedContactsTable extends Migration
 {

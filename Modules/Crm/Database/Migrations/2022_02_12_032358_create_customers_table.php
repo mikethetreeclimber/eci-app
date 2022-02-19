@@ -29,6 +29,11 @@ class CreateCustomersTable extends Migration
             $table->string('work_order')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('permission_status')->nullable();
+            $table->string('station_name')->nullable();
+            $table->string('unit')->nullable();
+            $table->string('assessed_date')->nullable();
+            $table->timestamp('imported_at');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -3,10 +3,20 @@
         <div class="w-full flex items-center justify-between p-6 space-x-6">
             <div class="flex-1 justify-center text-center">
                 <div class="flex justify-center items-center space-x-3">
-                    <h3 class="text-gray-900 text-md font-bold truncate">{{ $customer->name }}</h3>
+                    <h3 class="text-gray-900 text-md font-bold truncate">
+                        {{ strlen($customer->name) > 22 
+                            ? substr($customer->name, 0, 22) . '...' 
+                            : $customer->name }}
+                    </h3>
+                </div>
+                <div>
                     <span
                         class="flex-shrink-0 inline-block px-2 py-0.5 text-red-800 text-xs font-medium bg-red-100 rounded-full">Not
                         Approved</span>
+                </div>
+                <div>
+                    <span
+                        class="flex-shrink-0 inline-block px-2 py-0.5 text-gray-800 text-xs font-medium bg-yellow-100 rounded-full">{{ Carbon\Carbon::parse($customer->imported_at)->diffForHumans() }}</span>
                 </div>
                 <span class="text-sm text-gray-500">Service Address:</span>
                 <p class="mx-1 text-gray-700 text-sm truncate">
@@ -75,10 +85,10 @@
                     </p>
                     <div class="flex items-center">
                         <span class="mt-3 text-xs text-gray-500">Powered By
-                        <p class="text-gray-700 text-sm truncate">
-                            <x-nav-link href="https://datafinder.com">DataFinder API</x-nav-link>
-                        </p>
-                    </span>
+                            <p class="text-gray-700 text-sm truncate">
+                                <x-nav-link href="https://datafinder.com">DataFinder API</x-nav-link>
+                            </p>
+                        </span>
                     </div>
                 </div>
             </div>

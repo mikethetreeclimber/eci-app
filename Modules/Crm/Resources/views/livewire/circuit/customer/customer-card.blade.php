@@ -4,8 +4,18 @@
                 <div class="flex items-center space-x-3">
                     <h3 class="text-gray-900 text-md font-bold truncate">{{ $customer->first_name }}
                         {{ $customer->last_name }}</h3>
-                    <span
-                        class="flex-shrink-0 inline-block px-2 py-0.5 text-red-800 text-xs font-medium bg-red-100 rounded-full">Not Approved</span>
+                    @if ($customer->permission_status === 'approved')
+                        <span
+                            class="flex-shrink-0 inline-block px-2 py-0.5 text-green-800 text-xs font-medium bg-green-100 rounded-full">
+                            {{ ucwords($customer->permission_status) }}
+                        </span>
+                    @else
+                        <span
+                            class="flex-shrink-0 inline-block px-2 py-0.5 text-red-800 text-xs font-medium bg-red-100 rounded-full">
+                            Not Approved
+                        </span>
+                    @endif
+
                 </div>
                 <span class="text-xs text-gray-500">Physical Address:</span>
                 <p class="mt-1 text-gray-700 text-sm truncate">
@@ -21,10 +31,12 @@
                 </p>
             </div>
         </div>
+   
         <div>
             <div class="-mt-px flex divide-x divide-gray-200">
                 <div class="w-0 flex-1 flex">
-                    <a href="{{ route('crm.customer.show', ['circuit' => $circuit, 'customer' => $customer]) }}"
+                    {{-- <a href="{{ route('crm.customer.show', ['circuit' => $circuit, 'customer' => $customer]) }}" --}}
+                        <button  wire:click="$toggle('modal')"
                         class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
                         <!-- Heroicon name: solid/mail -->
                         <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -33,7 +45,27 @@
                             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                         </svg>
                         <span class="ml-3">View</span>
-                    </a>
+                    </button>
+                        <x-dialog-modal wire:model="modal">
+                            <x-slot name="title">
+                             
+                            </x-slot>
+                            <x-slot name="content">
+                              
+                                <div class="flex items-center justify-center">
+                                    <div>
+                                        <livewire:crm::circuit.customer.find-contacts :customer="$customer" :circuit="$circuit" />
+                                    </div>
+                                </div>
+                                <livewire:crm::circuit.customer.customer-header :customer="$customer" :circuit="$circuit" />
+                                <x-crm::section-border />
+                                <livewire:crm::circuit.customer.possible-contacts-list />
+                            </x-slot>
+                            <x-slot name="footer">
+            
+                            </x-slot>
+            
+                        </x-dialog-modal>
                 </div>
                 <div class="-ml-px w-0 flex-1 flex">
                     <a href="tel:+1-202-555-0170"

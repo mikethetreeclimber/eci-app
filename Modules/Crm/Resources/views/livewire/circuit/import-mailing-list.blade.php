@@ -80,11 +80,26 @@
             @endif
         </div> --}}
     </div>
+    <div>
+        @if ($importedAts)
+        @foreach ($importedAts as $key => $importedAt)
+            <span><x-button wire:click="setCustomers({{ $key }})">{{ Carbon\Carbon::parse($importedAt)->diffForHumans() }}</x-button></span>
+        @endforeach
+            
+        @endif
+    </div>
+    <div class="mt-4">
+        @if ($customers)
+        <x-button wire:click="getCustomers('approved')" >Permission Status Approved</x-button>
+    
+        <x-button class="bg-red-600 text-black font-bold" wire:click="destroyCustomers('{{ $customers[0]['imported_at'] }}')" >Destroy All Customers</x-button>
+        @endif
+    </div>
     <ul role="list" class="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {{-- @dd($customers) --}}
         @forelse ($customers as $customer)
             <livewire:crm::circuit.customer.customer-card :circuit="$circuit" :customer="$customer"
                 :wire:key="$customer['id']" />
-            {{-- @dump($customer) --}}
         @empty
             <div>
                 <h4 class="text-lg text-center font-bold">No Customers</h4>

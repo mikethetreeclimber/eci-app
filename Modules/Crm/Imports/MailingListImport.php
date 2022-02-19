@@ -13,19 +13,23 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Modules\Crm\Http\Livewire\Services\AddressSanitizer;
 
-class MailingListImport implements ToCollection, WithHeadingRow
+class MailingListImport implements ToModel, WithHeadingRow
 {
     public $circuitId;
+    public $importStart;
 
     public function __construct(Circuit $circuit)
     {
         $this->circuitId = $circuit->id;
+        $this->importStart = now();
     }
 
-    public function collection(Collection $rows)
+    public function model($row)
     {
-        return $rows->each(function ($row) {
-             Customers::create([
+
+        
+        if ($row['lastname'] !== null && $row['mailing_address'] !== null) {
+            Customers::create([
                 'circuit_id' => $this->circuitId,
                 'title' => $row['title'],
                 'work_order' => $row['work_order'],
@@ -41,8 +45,9 @@ class MailingListImport implements ToCollection, WithHeadingRow
                 'unit' => $row['unit'],
                 'permission_status' => $row['permission_status'],
                 'assessed_date' => $row['assessed_date'],
+                'imported_at' => $this->importStart
             ]);
-        });
+        }
     }
 
     // TODO: FIgure out how to que file import to imprt large files

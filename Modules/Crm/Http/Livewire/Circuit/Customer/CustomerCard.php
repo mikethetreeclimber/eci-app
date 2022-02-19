@@ -9,6 +9,7 @@ class CustomerCard extends Component
 {
     public $customer;
     public $circuit;
+    public $modal = false;
 
     public function mount(Customers $customer)
     {

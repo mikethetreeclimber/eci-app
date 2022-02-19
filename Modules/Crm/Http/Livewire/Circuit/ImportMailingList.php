@@ -27,13 +27,21 @@ class ImportMailingList extends Component
     public $contacts;
     public $customers;
     public $importingContacts;
-    public $blankPermissions = true;
+    public $permissionStatus = null;
+    public $importedAts;
 
     public function mount()
     {
-        $this->getCustomers();
-   
+        $this->customers = collect(
+            Customers::where('circuit_id', '=', $this->circuit->id)
+                ->where('permission_status', '=', $this->permissionStatus)
+                ->orWhere('permission_status', '=', '')
+                ->orderBy('imported_at', 'DESC')
+                ->get()
+        );
     }
+
+
 
     public function updatingMailing($value)
     {
@@ -43,16 +51,42 @@ class ImportMailingList extends Component
         )->validate();
     }
 
-    public function getCustomers()
+    public function changePermissionStatusApproved()
+    {
+        // $this->permissionStatus = 'approved';
+        // $this->getCustomers();
+    }
+
+    public function destroyCustomers($importedAt)
+    {
+        return Customers::where('circuit_id', '=', $this->circuit->id)
+            ->where('imported_at', '=', $importedAt)->delete();
+
+        $this->getCustomers();
+    }
+
+    public function setImportedAt()
+    {
+        $this->importedAts = collect($this->customers)->unique('imported_at')->pluck('imported_at')->flatten()->toArray();
+        $this->setCustomers();
+    }
+
+    public function setCustomers($key = 0)
+    {
+        $this->customers = collect($this->customers)->unique('last_name')->where('imported_at', $this->importedAts[$key])->values()->all();
+    }
+
+    public function getCustomers($permissionStatus = null)
     {
 
-        $this->customers = collect(Customers::where('circuit_id', '=', $this->circuit->id)
-                ->where('permission_status', '=', '')
-                ->get()
-            )->unique('last_name')->filter( function( $customer ){
-                    return $customer->last_name !== '';
-            })->values()->all();
 
+
+        $this->setImportedAt();
+
+
+
+
+        // dd($this->importedAts);
         // TODO: add filtering
         // if ($this->blankPermissions !== true ) {
         // $this->customers = collect(
@@ -83,7 +117,7 @@ class ImportMailingList extends Component
             ['contacts' => 'required|mimes:xls,xlsx'],
         )->validate();
     }
-// TODO: seperate to own component
+    // TODO: seperate to own component
     public function updatedContacts()
     {
         $file = Storage::put('/public', $this->contacts);
@@ -92,7 +126,7 @@ class ImportMailingList extends Component
         // session()->flash('flash.banner', 'Contacts Successfully Added');
         // session()->flash('flash.bannerStyle', 'success');
         // $this->redirectRoute('crm.show', ['circuit' => $this->circuit]);
-        
+
     }
 
 
