@@ -2,16 +2,17 @@
 
 namespace Modules\Crm\Imports;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Modules\Crm\Entities\Circuit;
 use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Modules\Crm\Entities\Contacts;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class ContactListImport implements ToModel, WithHeadingRow
+class ContactListImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQueue
 {
     public function model(array $row)
     {
@@ -36,10 +37,15 @@ class ContactListImport implements ToModel, WithHeadingRow
             ]);
         
     }
-// TODO: FIgure out how to que file import to imprt large files
-    // public function chunkSize(): int
+
+    // public function batchSize(): int
     // {
-    //     return 100;
-    // ShouldQueue, WithChunkReading
+    //     return 50;
     // }
+
+// TODO: FIgure out how to que file import to imprt large files
+    public function chunkSize(): int
+    {
+        return 1000;
+    }
 }

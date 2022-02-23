@@ -90,13 +90,24 @@
     </div>
     <div class="mt-4">
         @if ($customers)
-        <x-button wire:click="getCustomers('approved')" >Permission Status Approved</x-button>
+        <span>
+            <x-button wire:click="$set('permissionStatus', 'Approved')" />
+            Approved
+        </span>
+        <span>
+            <x-button wire:click="$set('permissionStatus', '')" />
+            Not Approved
+        </span>
+        {{-- <span>
+            <x-checkbox wire:model="permissionStatus" value=" " />
+            Not Approved
+        </span> --}}
+        {{-- @dd($customers) --}}
     
-        <x-button class="bg-red-600 text-black font-bold" wire:click="destroyCustomers('{{ $customers[0]['imported_at'] }}')" >Destroy All Customers</x-button>
+        <x-button class="bg-red-600 text-black font-bold" wire:click="destroyCustomers" >Destroy All Customers</x-button>
         @endif
     </div>
     <ul role="list" class="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {{-- @dd($customers) --}}
         @forelse ($customers as $customer)
             <livewire:crm::circuit.customer.customer-card :circuit="$circuit" :customer="$customer"
                 :wire:key="$customer['id']" />

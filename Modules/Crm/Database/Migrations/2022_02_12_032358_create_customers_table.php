@@ -19,6 +19,8 @@ class CreateCustomersTable extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Circuit::class, 'circuit_id');
+            $table->foreignIdFor(PhoneFinder::class, 'phone_finder_id')->nullable();
+            $table->boolean('phone_finder_used')->default(false);
             $table->string('mailing_address')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
@@ -29,7 +31,7 @@ class CreateCustomersTable extends Migration
             $table->string('work_order')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->string('permission_status')->nullable();
+            $table->string('permission_status')->nullable()->default('');
             $table->string('station_name')->nullable();
             $table->string('unit')->nullable();
             $table->string('assessed_date')->nullable();

@@ -15,16 +15,24 @@ class CustomerHeader extends Component
     public $customer;
     public $circuit;
     public $searching = true;
-    public $possibleContacts = [];
+    public $bestResults = [];
+    protected $listeners = [
+        'bestResultsFound' => 'setBestResults'
+    ];
 
     public function mount(Customers $customer, Circuit $circuit)
     {
         $this->customer = $customer;
         $this->circuit = $circuit;
         // $this->phoneFinder();
-        if ($this->customer->phone !== null && $this->customer->phone !== 0){
+        if ($this->customer->phone_phone_finder !== false) {
             $this->phoneFinder = $this->customer->phone;
         }
+    }
+
+    public function setBestResults($bestResults)
+    {
+        $this->bestResults = $bestResults;
     }
 
     public function phoneFinder()
@@ -46,9 +54,8 @@ class CustomerHeader extends Component
                     'content-type' => 'text/javascript; charset=utf8',
                 ])->get($url, $params)->json();
             } catch (\Throwable $th) {
-                
             }
-            
+
             if ($response['datafinder']['num-results'] === 1) {
                 $this->phoneFinder = PhoneFinder::create([
                     'first_name' => $response['datafinder']['results'][0]['FirstName'],
@@ -66,23 +73,25 @@ class CustomerHeader extends Component
 
                 ]);
                 $this->customer->update([
-                    'phone_finder_id' => $this->phoneFinder->id
+                    'phone_finder_id' => $this->phoneFinder->id,
+                    'phone_finder_used' => true
                 ]);
+
+                session()->flash('flash.banner', 'Data Finder Found Results');
+                session()->flash('flash.bannerStyle', 'success');
+                $this->redirectRoute('crm.customer.show', ['customer' => $this->customer, 'circuit' => $this->circuit]);
             }
-            
 
             if ($response['datafinder']['num-results'] == "0") {
                 $this->phoneFinder = [];
                 $this->customer->update([
-                    'phone_finder_id' => 0
+                    'phone_finder_used' => true
                 ]);
-            } 
-            session()->flash('flash.banner', 'Data Finder Found Results');
-            session()->flash('flash.bannerStyle', 'success');
-            $this->redirectRoute('crm.customer.show', ['customer' => $this->customer, 'circuit' => $this->circuit]);
+                session()->flash('flash.banner', 'Data Finder Found No Results');
+                session()->flash('flash.bannerStyle', 'danger');
+                $this->redirectRoute('crm.customer.show', ['customer' => $this->customer, 'circuit' => $this->circuit]);
+            }
         }
-
-        
     }
     public function render()
     {

@@ -17,8 +17,7 @@ class PossibleContactsList extends Component
     
     public function possibleContacts($possibleContacts)
     {
-        $this->allContacts = $possibleContacts;
-        $this->possibleContacts = $possibleContacts[$this->searchBy];
+        $this->possibleContacts = $possibleContacts;
         $this->fuzzySearchSent = true;
         $this->emit('searchReceived');
     }
