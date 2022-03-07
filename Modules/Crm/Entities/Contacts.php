@@ -11,8 +11,5 @@ class Contacts extends Model
 
     protected $guarded = [];
     
-    // public function customers()
-    // {
-    //     return $this->belongsTo(Customers::class);
-    // }
+
 }

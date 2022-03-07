@@ -11,9 +11,9 @@ class Customers extends Model
 
     protected $guarded = [];
 
-    public function contacts()
+    public function verifiedContact()
     {
-        return $this->hasOne(Contacts::class);
+        return $this->belongsTo(VerifiedContact::class, 'verified_contact_id');
     }
 
     public function phone()

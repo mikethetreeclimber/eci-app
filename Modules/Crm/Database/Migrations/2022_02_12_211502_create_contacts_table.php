@@ -17,7 +17,6 @@ class CreateContactsTable extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Customers::class, 'customer_id')->nullable();
             $table->string('region')->nullable();
             $table->integer('feeder_id')->nullable();
             $table->string('substation_name')->nullable();

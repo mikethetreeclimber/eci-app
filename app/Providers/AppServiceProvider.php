@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Http\RedirectResponse;
+use Livewire\Component;
 use Illuminate\Log\Logger;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Queue\Events\JobProcessed;
@@ -39,6 +40,14 @@ class AppServiceProvider extends ServiceProvider
                 'bannerStyle' => 'danger',
                 'banner' => $message,
             ]);
+        });
+
+        Component::macro('notify', function ($message) {
+            $this->dispatchBrowserEvent('notify', $message);
+        });
+
+        Component::macro('danger', function ($message) {
+            $this->dispatchBrowserEvent('danger', $message);
         });
 
         Queue::after(function (JobProcessed $event) {

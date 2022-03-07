@@ -19,10 +19,16 @@ class CreateVerifiedContactsTable extends Migration
     {
         Schema::create('verified_contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Circuit::class, 'circuit_id');
-            $table->foreignIdFor(Customers::class, 'customer_id');
-            $table->foreignIdFor(PhoneFinder::class, 'phone_id')->nullable();
-            $table->foreignIdFor(Contacts::class, 'contact_id')->nullable();
+            $table->string('customer_name')->nullable();
+            $table->string('service_address')->nullable();
+            $table->string('mailing_address')->nullable();
+            $table->string('phone_one')->nullable();
+            $table->string('phone_two')->nullable();
+            $table->string('phone_three')->nullable();
+            $table->string('phone_four')->nullable();
+            $table->string('phone_five')->nullable();
+            $table->string('email_address')->nullable();
+            $table->text('other_names')->nullable();
             $table->timestamps();
         });
     }

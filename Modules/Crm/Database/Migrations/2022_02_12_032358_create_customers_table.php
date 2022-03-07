@@ -6,6 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Modules\Crm\Entities\Circuit;
 use Modules\Crm\Entities\Contacts;
 use Modules\Crm\Entities\PhoneFinder;
+use Modules\Crm\Entities\VerifiedContact;
 
 class CreateCustomersTable extends Migration
 {
@@ -20,6 +21,7 @@ class CreateCustomersTable extends Migration
             $table->id();
             $table->foreignIdFor(Circuit::class, 'circuit_id');
             $table->foreignIdFor(PhoneFinder::class, 'phone_finder_id')->nullable();
+            $table->foreignIdFor(VerifiedContact::class, 'verified_contact_id')->nullable();
             $table->boolean('phone_finder_used')->default(false);
             $table->string('mailing_address')->nullable();
             $table->string('city')->nullable();

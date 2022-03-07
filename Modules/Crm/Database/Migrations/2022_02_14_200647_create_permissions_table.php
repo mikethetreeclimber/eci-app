@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -18,8 +19,11 @@ class CreatePermissionsTable extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Circuit::class, 'circuit_id');
+            $table->foreignIdFor(User::class, 'user_id');
             $table->foreignIdFor(Customers::class, 'customer_id');
-            $table->string('permission_status')->nullable();
+            $table->integer('attempt_number');
+            $table->string('attempt_type');
+            $table->text('attempt_notes');
             $table->timestamps();
         });
     }

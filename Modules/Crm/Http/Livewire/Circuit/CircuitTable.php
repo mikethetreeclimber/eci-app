@@ -16,7 +16,9 @@ class CircuitTable extends Component
 
     public function checkForCircuits()
     {
-        $this->circuits = Circuit::where('user_id', '=', auth()->id())->get()->toArray();
+        $this->circuits = Circuit::where('user_id', '=', auth()->id())
+        ->orderBy('created_at', 'DESC')
+        ->get()->toArray();
     }
 
     public function archive(Circuit $circuit)

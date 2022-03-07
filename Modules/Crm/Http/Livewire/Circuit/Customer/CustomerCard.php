@@ -11,9 +11,17 @@ class CustomerCard extends Component
     public $circuit;
     public $modal = false;
 
+
     public function mount(Customers $customer)
     {
         $this->customer = $customer;
+    }
+
+    public function approve()
+    {
+        $this->customer->update([
+            'permission_status' => 'Approved'
+        ]);
     }
     
     public function render()

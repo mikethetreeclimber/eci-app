@@ -8,8 +8,8 @@ class PossibleContactsList extends Component
 {
     public $fuzzySearchSent;
     public $allContacts;
-    public $possibleContacts;
-    public $searchBy = 'bestResults';
+    public $allPossibleContacts;
+    public $searchBy = 'byAddress';
 
     protected $listeners = [
         'possibleContacts'
@@ -17,15 +17,20 @@ class PossibleContactsList extends Component
     
     public function possibleContacts($possibleContacts)
     {
-        $this->possibleContacts = $possibleContacts;
+        // dd($possibleContacts);
+        $this->allPossibleContacts = $possibleContacts;
+
         $this->fuzzySearchSent = true;
         $this->emit('searchReceived');
     }
 
-    public function searchByName()
+    public function setSearchBy()
     {
-        $this->searchBy = 'byName';
-        $this->possibleContacts($this->allContacts);
+        if ($this->searchBy === 'byAddress') {
+            $this->searchBy = 'byName';
+        }elseif ($this->searchBy === 'byName') {
+            $this->searchBy = 'byAddress';
+        }
         
     }
 
@@ -36,6 +41,11 @@ class PossibleContactsList extends Component
         
     }
 
+    public function remove($key)
+    {
+        unset($this->allPossibleContacts[$this->searchBy][$key]);
+    }
+
     public function verify()
     {
         //
@@ -43,6 +53,20 @@ class PossibleContactsList extends Component
     
     public function render()
     {
-        return view('crm::livewire.circuit.customer.possible-contacts-list');
+     
+        if (isset($this->allPossibleContacts)) {
+            if ($this->allPossibleContacts[$this->searchBy] !== []) {
+                $this->searchBy = $this->searchBy;
+            } else {
+                $this->searchBy = 'byName';
+            } 
+            $possibleContacts = $this->allPossibleContacts[$this->searchBy];
+
+        } else {
+            $possibleContacts = [];
+        }
+        return view('crm::livewire.circuit.customer.possible-contacts-list', [
+            'possibleContacts' => $possibleContacts
+        ]);
     }
 }

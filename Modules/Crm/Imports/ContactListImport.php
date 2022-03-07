@@ -11,6 +11,9 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithProgressBar;
+
+use function PHPUnit\Framework\returnSelf;
 
 class ContactListImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQueue
 {
@@ -38,12 +41,6 @@ class ContactListImport implements ToModel, WithHeadingRow, WithChunkReading, Sh
         
     }
 
-    // public function batchSize(): int
-    // {
-    //     return 50;
-    // }
-
-// TODO: FIgure out how to que file import to imprt large files
     public function chunkSize(): int
     {
         return 1000;

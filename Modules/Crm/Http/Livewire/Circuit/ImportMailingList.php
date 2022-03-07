@@ -2,9 +2,12 @@
 
 namespace Modules\Crm\Http\Livewire\Circuit;
 
+use Illuminate\Bus\Batch;
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Jobs\Job;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -26,17 +29,16 @@ class ImportMailingList extends Component
     public $mailing;
     public $contacts;
     public $customers;
+    public $customersCount;
     public $importingContacts;
     public $permissionStatus = '';
-    public $importedAts;
+    public $importedAt = null;
+    public $take = 3;
+    public $skip = 0;
+    public $importing;
+    public $confirmDestroyCustomers = false;
     protected $allCustomers;
-
-    public function mount()
-    {
-        // $this->setCustomers();
-    }
-
-
+    protected $queryString = ['skip'];
 
     public function updatingMailing($value)
     {
@@ -46,67 +48,55 @@ class ImportMailingList extends Component
         )->validate();
     }
 
+    public function confirmDestroyCustomers()
+    {
+        $this->confirmDestroyCustomers = true;
+    }
+
     public function destroyCustomers()
     {
-        $customers = Customers::where('circuit_id', '=', $this->circuit->id)
+        $this->setImportedAt();
+        Customers::where('circuit_id', '=', $this->circuit->id)
             ->where('imported_at', '=', collect($this->customers)->first()['imported_at'])->delete();
-
-        $this->getCustomers();
+            
+        $this->confirmDestroyCustomers = false;
     }
 
-    public function setImportedAts()
+    public function setImportedAt()
     {
-        $this->importedAts = collect($this->customers)->unique('imported_at')->pluck('imported_at')->flatten()->toArray();
+        $this->importedAt = collect($this->customers)->unique('imported_at')->pluck('imported_at')->first();
     }
 
-    public function setCustomers()
+    public function next()
     {
-        $this->allCustomers = collect(
-            Customers::where('circuit_id', '=', $this->circuit->id)
-                ->orderBy('imported_at', 'DESC')
-                ->get()
-        );
-
-        $this->getCustomers();
+        // dd($this->customersCount / 3, 24/3,  $this);
+        // $this->take = $this->take += 3;
+        if ($this->skip !== 0) {
+            if ($this->skip > $this->customersCount) {
+                $this->skip = $this->customerCount;
+            } elseif ($this->skip / 3 < floor($this->customersCount / 3)) {
+                $this->skip = $this->skip += 3;
+            } else {
+                return;
+            }
+        } else {
+            $this->skip = $this->skip += 3;
+        }
     }
 
-    public function getCustomers()
+    public function back()
     {
-        $this->setImportedAts();
-        $this->customers = collect($this->allCustomers)
-            ->unique('last_name')
-            // ->where('imported_at', $this->importedAts[0])
-            // ->where('permission_status', $this->permissionStatus)
-            // ->orWhere('permission_status', '=', '')
-            ->values()->all();
-
-        // $this->setImportedAt();
-
-
-
-
-        // dd($this->importedAts);
-        // TODO: add filtering
-        // if ($this->blankPermissions !== true ) {
-        // $this->customers = collect(
-        //     Customers::where('circuit_id', '=', $this->circuit->id)->orderBy('permission_status')
-        //         ->get()
-        // )->unique('last_name')->values()->all();
-        // } else {
-        //     $this->customers = collect(
-        //         Customers::where('circuit_id', '=', $this->circuit->id)->where('permission_status', '=', '')
-        //             ->get()
-        //     )->unique('last_name')->values()->all();
-        // }
-
+        if ($this->skip > 1) {
+            $this->skip = $this->skip -= 3;
+        } else {
+            return;
+        }
     }
 
     public function updatedMailing()
     {
         $file = Storage::put('/public', $this->mailing);
         Excel::import(new MailingListImport($this->circuit), $file);
-
-        $this->getCustomers();
     }
 
     public function updatingContacts($value)
@@ -116,27 +106,29 @@ class ImportMailingList extends Component
             ['contacts' => 'required|mimes:xls,xlsx'],
         )->validate();
     }
-    // TODO: seperate to own component
+
     public function updatedContacts()
     {
         $file = Storage::put('/public', $this->contacts);
-        // ImportContactsJob::dispatch($file);
         Excel::import(new ContactListImport(), $file);
-        // // sleep(5);
-        // session()->flash('flash.banner', 'Contacts Successfully Added');
-        // session()->flash('flash.bannerStyle', 'success');
-        // $this->redirectRoute('crm.show', ['circuit' => $this->circuit]);
-
     }
-
 
     public function render()
     {
-        $this->customers =  collect(Customers::where('circuit_id', '=', $this->circuit->id)
-                ->orderBy('last_name', 'DESC')
-                ->get())->unique('last_name')
-                ->where('permission_status', $this->permissionStatus)
-                ->values()->all();
+        $this->allCustomers = Customers::where('circuit_id', '=', $this->circuit->id)
+            ->when($this->importedAt !== null, function ($query) {
+                return $query->where('imported_at', $this->importedAt);
+            })->orderBy('last_name', 'DESC')->get();
+
+        $this->customers =  collect($this->allCustomers)->unique('last_name')
+            ->where('permission_status', $this->permissionStatus)
+            ->skip($this->skip)
+            ->take($this->take)
+            ->values()->all();
+
+        $this->customersCount =  collect($this->allCustomers)->unique('last_name')
+            ->where('permission_status', $this->permissionStatus)
+            ->count();
 
         return view('crm::livewire.circuit.import-mailing-list', [
             'customers' => $this->customers,
