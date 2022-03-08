@@ -139,7 +139,7 @@
             <div class="flex-1 justify-center text-center space-y-2">
                 <div @click="show = !show" class="w-full h-10 py-2 px-4 bg-gray-300 rounded-md shadow-md text-center">
                     Show/Hide Fuzzy Search</div>
-                <div x-show="show">
+                <div x-show="show" style="display: none">
                     <livewire:crm::circuit.customer.find-contacts :customer="$customer" :circuit="$circuit" />
                     <br />
                     If best results are found they will be displayed right below!

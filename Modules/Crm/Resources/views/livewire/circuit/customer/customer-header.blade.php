@@ -28,6 +28,23 @@
                    Not Approved
                </x-danger-button>
 
+               <x-danger-button wire:click="$set('refusalModal', true)" type="button">
+                   Refusal
+               </x-danger-button>
+
+               <x-button wire:click="$set('approvalModal', true)" type="button">
+                   Approve
+               </x-button>
+           @endif
+           @if ($customer->permission_status === 'Refusal')
+               <x-danger-button wire:click="$set('notApprovedModal', true)" type="button">
+                   Not Approved
+               </x-danger-button>
+
+               <x-warning-button wire:click="$set('noContactModal', true)" type="button">
+                   No Contact
+               </x-warning-button>
+
                <x-button wire:click="$set('approvalModal', true)" type="button">
                    Approve
                </x-button>
@@ -40,8 +57,16 @@
                <x-danger-button wire:click="$set('notApprovedModal', true)" type="button">
                    Not Approved
                </x-danger-button>
+
+               <x-danger-button wire:click="$set('refusalModal', true)" type="button">
+                   Refusal
+               </x-danger-button>
            @endif
            @if ($customer->permission_status === '')
+               <x-danger-button wire:click="$set('refusalModal', true)" type="button">
+                   Refusal
+               </x-danger-button>
+
                <x-warning-button wire:click="$set('noContactModal', true)" type="button">
                    No Contact
                </x-warning-button>
@@ -52,112 +77,30 @@
            @endif
 
        </div>
-       <x-dialog-modal wire:model="approvalModal">
+       <x-confirmation-modal wire:model="approvalModal">
            <x-slot name="title">
-               Final Approval Form
+               Final Approval
            </x-slot>
            <x-slot name="content">
-               <x-form-section submit="submit" title="Final Attempt" description="Make your final attempt">
-                   <x-slot:form>
-                       <div class="col-span-2">
-                           <label for="attempt_date" class="col-span-2 block text-sm font-medium text-gray-700">
-                               Date
-                           </label>
-                       </div>
-                       <div class="col-span-4">
-                           <input type="date" id="attempt_date"
-                               class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md" />
-                       </div>
-                       <div class="col-span-2">
-                           <label for="attempt_time" class="col-span-2 block text-sm font-medium text-gray-700">
-                               Time
-                           </label>
-                       </div>
-                       <div class="col-span-4">
-                           <input type="time" id="attempt_time"
-                               class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md" />
-                       </div>
-                       <div class="col-span-2">
-                           <label for="attempt_type" class="block text-sm font-medium text-gray-700">
-                               Type
-                           </label>
-                       </div>
-                       <div class="col-span-4">
-                           <select id="attempt_type" name="attempt_type"
-                               class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
-                               <option selected>Select An Option</option>
-                               <option>Phone</option>
-                               <option>Verbal</option>
-                               <option>Email</option>
-                               <option>Mail</option>
-                               <option>Verbal</option>
-                               <option>Door Hanger</option>
-                           </select>
-                       </div>
-                       <div class="col-span-2">
-                           <label for="attempt_type" class="block text-sm font-medium text-gray-700">
-                               Notes
-                           </label>
-                       </div>
-                       <div class="col-span-6">
-                           <textarea name="notes" id="notes" cols="35" rows="3">Notes</textarea>
-                       </div>
-
-
-                   </x-slot:form>
-
-               </x-form-section>
-
+               Are You Sure You Are Ready To Approve This Customer?
+               <p>You Have Made {{ count($customer->permissions) }} Attempts So Far.</p>
            </x-slot>
            <x-slot name="footer">
                <div class="space-x-3">
-                   <x-button wire:click="$set('approvalModal', false)">Cancel</x-button>
+                   <x-warning-button wire:click="$set('approvalModal', false)">Cancel</x-warning-button>
 
                    <x-button wire:click="approve">Approve</x-button>
                </div>
            </x-slot>
 
-       </x-dialog-modal>
+       </x-confirmation-modal>
 
-       <x-dialog-modal wire:model="noContactModal">
+       <x-confirmation-modal wire:model="noContactModal">
            <x-slot name="title">
-               No Contact Form
+               No Contact
            </x-slot>
            <x-slot name="content">
-               <x-form-section submit="submit" title="Final Attempt" description="Make your final attempt">
-                   <x-slot:form>
-                       <div class="col-span-2">
-                           <label for="attempt_date" class="col-span-2 block text-sm font-medium text-gray-700">
-                               Date
-                           </label>
-                       </div>
-                       <div class="col-span-4">
-                           <input type="date" id="attempt_date"
-                               class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md" />
-                       </div>
-                       <div class="col-span-2">
-                           <label for="attempt_time" class="col-span-2 block text-sm font-medium text-gray-700">
-                               Time
-                           </label>
-                       </div>
-                       <div class="col-span-4">
-                           <input type="time" id="attempt_time"
-                               class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md" />
-                       </div>
-                       <div class="col-span-2">
-                           <label for="attempt_type" class="block text-sm font-medium text-gray-700">
-                               Notes
-                           </label>
-                       </div>
-                       <div class="col-span-6">
-                           <textarea name="notes" id="notes" cols="35" rows="3">Notes</textarea>
-                       </div>
-
-
-                   </x-slot:form>
-
-               </x-form-section>
-
+               Are You Sure You Want To Make This Customer A No Contact?
            </x-slot>
            <x-slot name="footer">
                <div class="space-x-3">
@@ -167,7 +110,24 @@
                </div>
            </x-slot>
 
-       </x-dialog-modal>
+       </x-confirmation-modal>
+
+       <x-confirmation-modal wire:model="refusalModal">
+           <x-slot name="title">
+               Refusal
+           </x-slot>
+           <x-slot name="content">
+               Are You Sure You Want To Make This Customer A Refusal?
+           </x-slot>
+           <x-slot name="footer">
+               <div class="space-x-3">
+                   <x-warning-button wire:click="$set('refusalModal', false)">Cancel</x-warning-button>
+
+                   <x-danger-button wire:click="refusal">Refusal</x-danger-button>
+               </div>
+           </x-slot>
+
+       </x-confirmation-modal>
 
        <x-dialog-modal wire:model="editModal">
            <x-slot name="title">
@@ -176,23 +136,26 @@
            <x-slot name="content">
                <div class="grid grid-cols-6 gap-6">
                    <div class="col-span-6 grid grid-cols-5 gap-6">
-                       <label for="first-name" class="col-span-5 block text-sm font-medium text-gray-700">Customer Name</label>
+                       <label for="first-name" class="col-span-5 block text-sm font-medium text-gray-700">Customer
+                           Name</label>
                        <x-input type="text" wire:model="customer.first_name" class="col-span-2" />
-                       <x-input type="text" wire:model="customer.last_name"  class="col-span-2"/>
+                       <x-input type="text" wire:model="customer.last_name" class="col-span-2" />
                    </div>
 
                    <div class="col-span-6 grid grid-cols-5 gap-6">
-                       <label for="first-name" class="col-span-5 block text-sm font-medium text-gray-700">Mailing Address</label>
-                       <x-input type="text" wire:model="customer.mailing_address" class="col-span-3"/>
-                       <x-input type="text" wire:model="customer.city" class="col-span-3"/>
+                       <label for="first-name" class="col-span-5 block text-sm font-medium text-gray-700">Mailing
+                           Address</label>
+                       <x-input type="text" wire:model="customer.mailing_address" class="col-span-3" />
+                       <x-input type="text" wire:model="customer.city" class="col-span-3" />
                        <x-input type="text" wire:model="customer.state" class="col-span-1" />
                    </div>
 
                    <div class="col-span-6 grid grid-cols-5 gap-6">
-                       <label for="first-name" class="col-span-5 block text-sm font-medium text-gray-700">Physical Address</label>
-                       <x-input type="text" wire:model="customer.physical_address" class="col-span-3"/>
-                       <x-input type="text" wire:model="customer.physical_city" class="col-span-3"/>
-                       <x-input type="text" wire:model="customer.physical_state" class="col-span-1"/>
+                       <label for="first-name" class="col-span-5 block text-sm font-medium text-gray-700">Physical
+                           Address</label>
+                       <x-input type="text" wire:model="customer.physical_address" class="col-span-3" />
+                       <x-input type="text" wire:model="customer.physical_city" class="col-span-3" />
+                       <x-input type="text" wire:model="customer.physical_state" class="col-span-1" />
                    </div>
                </div>
 

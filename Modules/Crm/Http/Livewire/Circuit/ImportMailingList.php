@@ -95,6 +95,7 @@ class ImportMailingList extends Component
 
     public function updatedMailing()
     {
+        
         $file = Storage::put('/public', $this->mailing);
         Excel::import(new MailingListImport($this->circuit), $file);
     }

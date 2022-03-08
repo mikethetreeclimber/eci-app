@@ -9,10 +9,6 @@ class Permission extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $guarded = [];
     
-    protected static function newFactory()
-    {
-        return \Modules\Crm\Database\factories\PermissionFactory::new();
-    }
 }

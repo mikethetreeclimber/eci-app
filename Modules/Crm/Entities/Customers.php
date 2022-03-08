@@ -16,10 +16,16 @@ class Customers extends Model
         return $this->belongsTo(VerifiedContact::class, 'verified_contact_id');
     }
 
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class, 'customer_id');
+    }
+
     public function phone()
     {
         return $this->belongsTo(PhoneFinder::class, 'phone_finder_id');
     }
+
     public function getNameAttribute($value)
     {
         return "{$this->first_name} {$this->last_name}";

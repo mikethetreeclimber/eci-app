@@ -2,21 +2,17 @@
 
 namespace Modules\Crm\Imports;
 
-use Modules\Crm\Entities\Circuit;
-use Illuminate\Support\Collection;
 use Modules\Crm\Entities\Contacts;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\WithProgressBar;
+use Modules\Crm\Http\Livewire\Circuit\Services\PhoneNumberFormattor;
 
-use function PHPUnit\Framework\returnSelf;
 
 class ContactListImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQueue
 {
+
     public function model(array $row)
     {
             return new Contacts([
@@ -33,8 +29,8 @@ class ContactListImport implements ToModel, WithHeadingRow, WithChunkReading, Sh
                     preg_replace('/\b , \b/', ', ',
                         preg_replace('/\s+/', ' ',
                             trim($row['mailing_address']))),
-                'primary_phone' => $row['primary_phone'],
-                'alt_phone' => $row['alt_phone'],
+                'primary_phone' =>  PhoneNumberFormattor::format($row['primary_phone']),
+                'alt_phone' =>      PhoneNumberFormattor::format($row['alt_phone']),
                 'email_address' => $row['email_address'],
                 'revenue_class_desc' => $row['revenue_class_desc']
             ]);

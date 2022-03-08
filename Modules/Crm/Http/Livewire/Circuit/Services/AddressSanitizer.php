@@ -71,28 +71,28 @@ class AddressSanitizer
             return Str::replace('TWELFTH', '12TH', $address);
         }
         if (Str::contains(strtoupper($address), 'THIRTEENTH')) {
-            return Str::replace('THIRTEENTH', '12TH', $address);
+            return Str::replace('THIRTEENTH', '13TH', $address);
         }
         if (Str::contains(strtoupper($address), 'FOURTEENTH')) {
-            return Str::replace('FOURTEENTH', '12TH', $address);
+            return Str::replace('FOURTEENTH', '14TH', $address);
         }
         if (Str::contains(strtoupper($address), 'FIFTEENTH')) {
-            return Str::replace('FIFTEENTH', '12TH', $address);
+            return Str::replace('FIFTEENTH', '15TH', $address);
         }
         if (Str::contains(strtoupper($address), 'SIXTEENTH')) {
-            return Str::replace('SIXTEENTH', '12TH', $address);
+            return Str::replace('SIXTEENTH', '16TH', $address);
         }
         if (Str::contains(strtoupper($address), 'SEVENTEENTH')) {
-            return Str::replace('SEVENTEENTH', '12TH', $address);
+            return Str::replace('SEVENTEENTH', '17TH', $address);
         }
         if (Str::contains(strtoupper($address), 'EIGHTEENTH')) {
-            return Str::replace('EIGHTEENTH', '12TH', $address);
+            return Str::replace('EIGHTEENTH', '18TH', $address);
         }
         if (Str::contains(strtoupper($address), 'NINETEENTH')) {
-            return Str::replace('NINETEENTH', '12TH', $address);
+            return Str::replace('NINETEENTH', '19TH', $address);
         }
         if (Str::contains(strtoupper($address), 'TWENTIETH')) {
-            return Str::replace('TWENTIETH', '12TH', $address);
+            return Str::replace('TWENTIETH', '20TH', $address);
         }
         return $address;
     }

@@ -16,6 +16,7 @@ class CustomerHeader extends Component
     public $circuit;
     public $customer;
     public $editModal = false;
+    public $refusalModal = false;
     public $approvalModal = false;
     public $noContactModal = false;
     public $notApprovedModal = false;
@@ -43,6 +44,15 @@ class CustomerHeader extends Component
         ]);
 
         $this->approvalModal = false;
+    }
+
+    public function refusal()
+    {
+        $this->customer->update([
+            'permission_status' => 'Refusal'
+        ]);
+
+        $this->refusalModal = false;
     }
 
     public function notApproved()

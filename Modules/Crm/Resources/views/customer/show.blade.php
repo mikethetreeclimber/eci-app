@@ -1,7 +1,7 @@
 @extends('crm::layouts.master')
 
 @section('content')
-    <a href="{{ route('crm.show', ['circuit' => $circuit]) }}">
+    <a href="{{ url()->previous() }}">
         < Go Back</a>
 
          
