@@ -122,13 +122,13 @@ class ImportMailingList extends Component
             })->orderBy('last_name', 'DESC')->get();
 
         $this->customers =  collect($this->allCustomers)->unique('last_name')
-            ->where('permission_status', $this->permissionStatus)
+            ->where('permission_status', 'like', $this->permissionStatus)
             ->skip($this->skip)
             ->take($this->take)
             ->values()->all();
 
         $this->customersCount =  collect($this->allCustomers)->unique('last_name')
-            ->where('permission_status', $this->permissionStatus)
+            ->where('permission_status', 'like', $this->permissionStatus)
             ->count();
 
         return view('crm::livewire.circuit.import-mailing-list', [
