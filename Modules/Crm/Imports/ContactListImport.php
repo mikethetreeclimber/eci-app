@@ -4,10 +4,12 @@ namespace Modules\Crm\Imports;
 
 use Modules\Crm\Entities\Contacts;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Events\AfterImport;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Modules\Crm\Http\Livewire\Circuit\Services\PhoneNumberFormattor;
+use Maatwebsite\Excel\Concerns\RegistersEventListeners;
+use Maatwebsite\Excel\Concerns\WithEvents;
 
 
 class ContactListImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQueue
@@ -29,8 +31,8 @@ class ContactListImport implements ToModel, WithHeadingRow, WithChunkReading, Sh
                     preg_replace('/\b , \b/', ', ',
                         preg_replace('/\s+/', ' ',
                             trim($row['mailing_address']))),
-                'primary_phone' =>  PhoneNumberFormattor::format($row['primary_phone']),
-                'alt_phone' =>      PhoneNumberFormattor::format($row['alt_phone']),
+                'primary_phone' =>  $row['primary_phone'],
+                'alt_phone' =>      $row['alt_phone'],
                 'email_address' => $row['email_address'],
                 'revenue_class_desc' => $row['revenue_class_desc']
             ]);
