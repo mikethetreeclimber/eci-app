@@ -18,7 +18,6 @@ class ContactListImport implements ToModel, WithHeadingRow, WithChunkReading, Sh
     public function model(array $row)
     {
             return new Contacts([
-                'customer_id' => null,
                 'region' => $row['region'],
                 'feeder_id' => $row['feeder_id'],
                 'substation_name' => $row['substation_name'],
