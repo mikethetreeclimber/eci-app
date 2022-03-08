@@ -1,5 +1,5 @@
 @props([
-    'permissionStatus' => null,
+    'permissionStatus' => '',
     'size' => 'base'
     ])
 @if ($permissionStatus === 'Approved')
