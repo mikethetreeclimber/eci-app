@@ -43,7 +43,7 @@ class MailingListImport implements ToModel, WithHeadingRow
                 'physical_state' => $row['physical_state'],
                 'station_name' => $row['station_name'],
                 'unit' => $row['unit'],
-                'permission_status' => $row['permission_status'],
+                'permission_status' => ucwords($row['permission_status']),
                 'assessed_date' => $row['assessed_date'],
                 'imported_at' => $this->importStart
             ]);
