@@ -23,7 +23,7 @@
                Edit
            </x-secondary-button>
 
-           @if ($customer->permission_status === 'No Contact')
+           @if (ucwords($customer->permission_status) === 'No Contact')
                <x-danger-button wire:click="$set('notApprovedModal', true)" type="button">
                    Not Approved
                </x-danger-button>
@@ -36,7 +36,7 @@
                    Approve
                </x-button>
            @endif
-           @if ($customer->permission_status === 'Refusal')
+           @if (ucwords($customer->permission_status) === 'Refusal')
                <x-danger-button wire:click="$set('notApprovedModal', true)" type="button">
                    Not Approved
                </x-danger-button>
@@ -49,7 +49,7 @@
                    Approve
                </x-button>
            @endif
-           @if ($customer->permission_status === 'Approved')
+           @if (ucwords($customer->permission_status) === 'Approved')
                <x-warning-button wire:click="$set('noContactModal', true)" type="button">
                    No Contact
                </x-warning-button>
@@ -62,7 +62,7 @@
                    Refusal
                </x-danger-button>
            @endif
-           @if ($customer->permission_status === '')
+           @if (ucwords($customer->permission_status) === '')
                <x-danger-button wire:click="$set('refusalModal', true)" type="button">
                    Refusal
                </x-danger-button>
