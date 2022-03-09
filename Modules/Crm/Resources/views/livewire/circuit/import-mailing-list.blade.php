@@ -7,6 +7,8 @@
             {{ $circuit->circuit_name }}
         </h3>
         <div class="flex space-x-4">
+            <x-input-error for="mailing" />
+
             <div class="mt-3 sm:mt-0 sm:ml-4">
                 <label for="mailing"
                     class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-800 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
