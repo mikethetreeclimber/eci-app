@@ -1,7 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Modules\Crm\Entities\Circuit;
+use Illuminate\Support\Facades\DB;
 use Modules\Crm\Entities\Contacts;
+use Modules\Crm\Entities\Customers;
+use Modules\Crm\Entities\Permission;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +23,8 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    $contactsCount = count(Contacts::get());
-    return view('dashboard', compact('contactsCount'));
+    $customersCount = Customers::count();
+    $permissionCount = Permission::count();
+    $activeCircuits = Circuit::count();
+    return view('dashboard', compact('customersCount', 'permissionCount', 'activeCircuits'));
 })->name('dashboard');
