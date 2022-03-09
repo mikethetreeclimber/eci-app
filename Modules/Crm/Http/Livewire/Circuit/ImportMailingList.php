@@ -100,7 +100,7 @@ class ImportMailingList extends Component
         try {
             Excel::import(new MailingListImport($this->circuit), $file);
         } catch (\Error $error) {
-            $this->dangerNotify($error);
+            dd($error);
         }
     }
 
