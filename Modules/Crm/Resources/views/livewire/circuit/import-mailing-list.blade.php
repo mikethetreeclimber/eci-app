@@ -7,7 +7,7 @@
             {{ $circuit->circuit_name }}
         </h3>
         <div class="flex space-x-4">
-            <x-input-error for="mailing" />
+            {{-- <x-input-error for="mailing" /> --}}
 
             <div class="mt-3 sm:mt-0 sm:ml-4">
                 <label for="mailing"
