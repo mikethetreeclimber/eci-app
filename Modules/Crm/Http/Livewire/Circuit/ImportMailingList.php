@@ -99,7 +99,7 @@ class ImportMailingList extends Component
         $file = Storage::put('/public', $this->mailing);
         try {
             Excel::import(new MailingListImport($this->circuit), $file);
-        } catch (\Exception $error) {
+        } catch (\Throwable $error) {
             throw $error;
         }
     }
