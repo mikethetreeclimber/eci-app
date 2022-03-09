@@ -115,7 +115,7 @@ class CustomerContacts extends Component
                 break;
 
             default:
-                $this->danger('WHOOPS SOMETHING WENT WRONG');
+                $this->dangerNotify('WHOOPS SOMETHING WENT WRONG');
                 return;
         }
 
@@ -138,12 +138,12 @@ class CustomerContacts extends Component
 
             if (preg_match('~[0-9]+~', $this->customer->mailing_address)) {
                 $this->existingPhoneFinder = PhoneFinder::where('address', '=', $this->customer->mailing_address)
-                    ->orWhere('city', '=', $this->customer->city)
+                    ->where('city', '=', $this->customer->city)
                     ->where('state', '=', $this->customer->state)
                     ->get()->toArray();
             } else {
                 $this->existingPhoneFinder = PhoneFinder::where('address', 'LIKE', '%' . $this->customer->physical_address . '%')
-                    ->orWhere('city', '=', $this->customer->physical_city)
+                    ->where('city', '=', $this->customer->physical_city)
                     ->where('state', '=', $this->customer->physical_state)
                     ->get()->toArray();
             }
@@ -254,7 +254,7 @@ class CustomerContacts extends Component
                     'phone_finder_used' => true
                 ]);
 
-                $this->danger('Data Finder Found No Results');
+                $this->dangerNotify('Data Finder Found No Results');
 
                 // session()->flash('flash.banner', 'Data Finder Found No Results');
                 // session()->flash('flash.bannerStyle', 'danger');

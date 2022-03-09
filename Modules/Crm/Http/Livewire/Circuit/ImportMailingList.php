@@ -97,7 +97,11 @@ class ImportMailingList extends Component
     {
         
         $file = Storage::put('/public', $this->mailing);
-        Excel::import(new MailingListImport($this->circuit), $file);
+        try {
+            Excel::import(new MailingListImport($this->circuit), $file);
+        } catch (\Error $error) {
+            $this->dangerNotify($error);
+        }
     }
 
     public function updatingContacts($value)

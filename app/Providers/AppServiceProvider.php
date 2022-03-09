@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
             $this->dispatchBrowserEvent('notify', $message);
         });
 
-        Component::macro('danger', function ($message) {
+        Component::macro('dangerNotify', function ($message) {
             $this->dispatchBrowserEvent('danger', $message);
         });
 

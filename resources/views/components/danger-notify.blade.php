@@ -5,7 +5,7 @@
             this.messages.splice(this.messages.indexOf(message), 1)
         },
     }"
-    @danger.window="let message = $event.detail; messages.push(message); setTimeout(() => { remove(message) }, 5500)"
+    @dangerNotify.window="let message = $event.detail; messages.push(message); setTimeout(() => { remove(message) }, 5500)"
     class="fixed inset-0 flex flex-col items-end justify-center px-4 py-6 pointer-events-none sm:p-6 sm:justify-start space-y-4"
 >
     <template x-for="(message, messageIndex) in messages" :key="messageIndex" hidden>
