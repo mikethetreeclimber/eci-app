@@ -137,7 +137,7 @@
     <div class="divide-y divide-gray-200 space-y-2">
         <div x-data="{show: false}" class="w-full flex items-center justify-between space-x-6">
             <div class="flex-1 justify-center text-center space-y-2">
-                <div @click="show = !show" class="w-full h-10 py-2 px-4 bg-gray-300 rounded-md shadow-md text-center">
+                <div @click="show = !show" class="cursor-pointer w-full h-10 py-2 px-4 bg-gray-300 rounded-md shadow-md text-center">
                     Show/Hide Fuzzy Search</div>
                 <div x-show="show" style="display: none">
                     <livewire:crm::circuit.customer.find-contacts :customer="$customer" :circuit="$circuit" />
@@ -178,25 +178,7 @@
                 @endif
             </div>
         @endif
-        @if ($customer->phone_finder_used == false)
-            <div class="w-full flex items-center justify-between p-6 space-x-6">
-                <div class="flex-1 justify-center text-center">
-                    <div class="flex justify-center items-center space-x-3 mb-3">
-                        <button wire:click="phoneFinder"
-                            class="p-2 border hover:bg-orange-400 bg-orange-200 rounded-md border-gray-900 shadow hover:shadow-lg text-gray-900 text-md font-bold truncate">
-                            Click To
-                            Search Data Finder</button>
-                    </div>
-                    <p class="mt-1 text-gray-700 text-sm truncate">
-                        Search With Mailing Address and Name
-                    </p>
-                    <span class="mt-3 text-xs text-gray-500">Powered By</span>
-                    <p class="text-gray-700 text-sm truncate">
-                        <x-nav-link href="https://datafinder.com">DataFinder API</x-nav-link>
-                    </p>
-                </div>
-            </div>
-        @endif
+
         @if ($bestResults === [] && $bestResults !== null)
             <div class="w-full flex items-center justify-between p-6 space-x-6">
                 <div class="flex-1 justify-center text-center">
@@ -224,6 +206,26 @@
                     </div>
                 </div>
             @endif
+
+        @endif
+        @if ($customer->phone_finder_used == false)
+            <div class="w-full flex items-center justify-between p-6 space-x-6">
+                <div class="flex-1 justify-center text-center">
+                    <div class="flex justify-center items-center space-x-3 mb-3">
+                        <button wire:click="phoneFinder"
+                            class="p-2 border hover:bg-orange-400 bg-orange-200 rounded-md border-gray-900 shadow hover:shadow-lg text-gray-900 text-md font-bold truncate">
+                            Click To
+                            Search Data Finder</button>
+                    </div>
+                    <p class="mt-1 text-gray-700 text-sm truncate">
+                        Search With Mailing Address and Name
+                    </p>
+                    <span class="mt-3 text-xs text-gray-500">Powered By</span>
+                    <p class="text-gray-700 text-sm truncate">
+                        <x-nav-link href="https://datafinder.com">DataFinder API</x-nav-link>
+                    </p>
+                </div>
+            </div>
         @endif
         @if ($customer->phone_finder_used == true && $customer->phone_finder_id !== null)
             <div class="mt-2 ">

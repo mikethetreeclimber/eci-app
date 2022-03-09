@@ -17,16 +17,19 @@
             </dd>
         </div>
     </div>
+    <div class="sm:col-span-1 space-y-2">
+       <x-button wire:click="$emit('verify', 'new')">Add Contact</x-button>
+    </div>
     @if ($customer->verifiedContact)
         <div x-data="{verifiedContact: false}" class="sm:col-span-2">
             <div @click="verifiedContact = !verifiedContact" x-show="verifiedContact == false"
-                class="w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
+                class="cursor-pointer w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
                 <span>Show Verified Contacts</span>
             </div>
             <div x-show="verifiedContact" style="display: none" class="grid grid-cols-1 sm:grid-cols-2">
                 <div class="sm:col-span-2 sm:text-center mb-4">
                     <div @click="verifiedContact = !verifiedContact" x-show="verifiedContact"
-                        class="w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
+                        class="cursor-pointer w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
                         <span>Hide Verified Contacts</span>
                     </div>
                 </div>
@@ -63,13 +66,13 @@
         </div> --}}
     <div x-data="{stationData: false}" class="sm:col-span-2">
         <div @click="stationData = !stationData" x-show="stationData == false"
-            class="w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
+            class="cursor-pointer w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
             <span>Show Station Data</span>
         </div>
         <div x-show="stationData" style="display: none" class="grid grid-cols-1 sm:grid-cols-2">
             <div class="sm:col-span-2 sm:text-center mb-4">
                 <div @click="stationData = !stationData" x-show="stationData"
-                    class="w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
+                    class="cursor-pointer w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
                     <span>Hide Station Data</span>
                 </div>
             </div>

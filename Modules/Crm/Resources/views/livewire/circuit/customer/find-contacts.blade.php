@@ -1,6 +1,8 @@
 <div class="grid grid-cols-1">
     <div class="grid mt-1 space-y-2">
-
+        <div class="flex items-center justify-center">
+            <h5 class="text-xs">If address does not have a house number or street it is recommended not to search with that address.</h5>
+        </div>
         <label for="attempt_type" class="block text-sm font-medium text-gray-700">
             Search
         </label>

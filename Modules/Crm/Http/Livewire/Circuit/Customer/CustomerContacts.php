@@ -57,7 +57,7 @@ class CustomerContacts extends Component
     public function confirmVerify()
     {
         $this->verifiedContact->push();
-        if ($this->customer->verifiedContact === null ) {
+        if ($this->customer->verifiedContact === null) {
             $this->customer->update([
                 'verified_contact_id' => $this->verifiedContact->id
             ]);
@@ -110,6 +110,10 @@ class CustomerContacts extends Component
                 ];
                 break;
 
+            case 'new':
+                $this->contacts = [];
+                break;
+
             default:
                 $this->danger('WHOOPS SOMETHING WENT WRONG');
                 return;
@@ -131,15 +135,14 @@ class CustomerContacts extends Component
             //     ->where('state', '=', $this->customer->physical_state);
             // })->get()->toArray();
 
-            
+
             if (preg_match('~[0-9]+~', $this->customer->mailing_address)) {
                 $this->existingPhoneFinder = PhoneFinder::where('address', '=', $this->customer->mailing_address)
                     ->orWhere('city', '=', $this->customer->city)
                     ->where('state', '=', $this->customer->state)
                     ->get()->toArray();
-                
             } else {
-                $this->existingPhoneFinder = PhoneFinder::where('address', 'LIKE', '%'.$this->customer->physical_address.'%')
+                $this->existingPhoneFinder = PhoneFinder::where('address', 'LIKE', '%' . $this->customer->physical_address . '%')
                     ->orWhere('city', '=', $this->customer->physical_city)
                     ->where('state', '=', $this->customer->physical_state)
                     ->get()->toArray();
