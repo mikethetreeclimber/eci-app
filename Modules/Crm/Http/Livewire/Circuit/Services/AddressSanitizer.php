@@ -14,19 +14,19 @@ class AddressSanitizer
 
     protected static function sanitizeStreetSuffix($address)
     {
-        if (Str::contains(strtoupper($address), 'AVENUE')) {
+        if (Str::endsWith(strtoupper($address), 'AVENUE')) {
             return Str::replace('AVENUE', 'AVE', strtoupper($address));
         }
-        if (Str::contains(strtoupper($address), 'STREET')) {
+        if (Str::endWith(strtoupper($address), 'STREET')) {
             return Str::replace('STREET', 'ST', strtoupper($address));
         }  
-        if (Str::contains(strtoupper($address), 'DRIVE')) {
+        if (Str::endsWith(strtoupper($address), 'DRIVE')) {
             return Str::replace('DRIVE', 'DR', strtoupper($address));
         }
-        if (Str::contains(strtoupper($address), 'ROAD')) {
+        if (Str::endsWith(strtoupper($address), 'ROAD')) {
             return Str::replace('ROAD', 'RD', strtoupper($address));
         }
-        if (Str::contains(strtoupper($address), 'MOUNT')) {
+        if (Str::endsWith(strtoupper($address), 'MOUNT')) {
             return Str::replace('MOUNT', 'MT', strtoupper($address));
         }
         return $address;
