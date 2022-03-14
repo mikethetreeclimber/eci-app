@@ -3,6 +3,7 @@
 namespace Modules\Crm\Http\Livewire\Circuit\Customer;
 
 use Fuse\Fuse;
+use Illuminate\Support\ViewErrorBag;
 use Livewire\Component;
 use Modules\Crm\Entities\Contacts;
 
@@ -13,7 +14,7 @@ class FindContacts extends Component
     public $phoneFinder;
     public $searchBy = 'physical_address';
     public $search = 'service_address';
-    public $bestResults = [];
+
     public $fuzzySearchComplete = false;
     public $possibleContacts = [
         'byName' => [],
@@ -29,6 +30,7 @@ class FindContacts extends Component
         $this->fuzzySearchComplete = true;
     }
 
+
     public function fuzzySearch()
     {
 
@@ -36,14 +38,9 @@ class FindContacts extends Component
             'byName' => [],
             'byAddress' => [],
         ];
-        // dd($this->search, $this->customer->{$this->searchBy});
+
         $this->fuzzySearchComplete = true;
-        $addressAndNameOptions = [
-            'ignoreLocation' => true,
-            'threshold' => 0.4,
-            'includeScore' => true,
-            'keys' => ['service_address', 'mailing_address', 'customer_name'],
-        ];
+
         $addressOptions = [
             'ignoreLocation' => true,
             'threshold' => 0.4,
@@ -57,76 +54,45 @@ class FindContacts extends Component
             'keys' => ['customer_name'],
         ];
 
-        $contactsByNameAndAddress = Contacts::select()
-            ->where('customer_name', 'LIKE', '%' . $this->customer->last_name)
-            ->where($this->search, 'LIKE', '%' . $this->customer->{$this->searchBy} . '%')
-            ->get();
-
-        $contactsByName = Contacts::select()->where('customer_name', 'LIKE', '%' . $this->customer->last_name)->get();
-
-        $contactsByAddress = Contacts::select()
-            ->where($this->search, 'LIKE', '%' . $this->customer->{$this->searchBy} . '%')
-            ->get();
-
-
-        // if (!preg_match('~[0-9]+~', $this->customer->mailing_address) && preg_match('~[0-9]+~', $this->customer->physical_address)) {
-
-        //     $contactsByNameAndAddress = Contacts::select()
-        //         ->where('customer_name', 'LIKE',  '%' . $this->customer->last_name)
-        //         ->where('mailing_address', 'LIKE', '%' .   $this->customer->service_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->get();
-
-        //     $contactsByAddress = Contacts::select()
-        //         ->where('service_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->orWhere('mailing_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->get();
-
-        // } 
-        // if (preg_match('~[0-9]+~', $this->customer->mailing_address) && !preg_match('~[0-9]+~', $this->customer->physical_address)) {
-
-        //     $contactsByNameAndAddress = Contacts::select()
-        //         ->where('customer_name', 'LIKE',  '%' . $this->customer->last_name)
-        //         ->where('mailing_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->get();
-
-        //     $contactsByAddress = Contacts::select()
-        //         ->where('mailing_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->get();
-
-        // } 
-        // if (preg_match('~[0-9]+~', $this->customer->mailing_address) && preg_match('~[0-9]+~', $this->customer->physical_address)) {
-
-        //     $contactsByNameAndAddress = Contacts::select()
-        //         ->where('customer_name', 'LIKE',  '%' . $this->customer->last_name)
-        //         ->where('mailing_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->orWhere('mailing_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->get();
-
-        //     $contactsByAddress = Contacts::select()
-        //         ->where('mailing_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->orWhere('mailing_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->get();
+        // if (!preg_match('~[0-9]+~', $this->customer->physical_address)){
         // }
 
 
+        $contactsByName = Contacts::where('customer_name', 'LIKE', '%' . $this->customer->last_name)->get();
 
-        $fuseNameAndAddress  = new Fuse(
-            $contactsByNameAndAddress->flatten()->toArray(),
-            $addressAndNameOptions
-        );
-        $fuzzyNameAndAddressSearch = $fuseNameAndAddress->search($this->customer->service_address);
 
-        $fuseAddress  = new Fuse(
-            $contactsByAddress->flatten()->toArray(),
-            $addressOptions
-        );
-        $fuzzyAddressSearch = $fuseAddress->search($this->customer->service_address);
+        if ($this->searchBy === 'physical_address') {
+            if (preg_match('~[0-9]+~', $this->customer->physical_address)) {
+                $contactsByAddress = Contacts::where($this->search, 'LIKE', '%' . $this->customer->service_address . '%')
+                    ->get();
+            } else {
+                $contactsByAddress = null;
+                $this->addError('invalidSearch', 'The address must have a valid house number and a valid street to use the search function');
+                return;
+            }
+        }
+
+        if ($this->searchBy === 'mailing_address') {
+            if (preg_match('~[0-9]+~', $this->customer->mailing_address)) {
+                $contactsByAddress = Contacts::where($this->search, 'LIKE', '%' . $this->customer->mailing_address . '%')
+                    ->get();
+            } else {
+                $contactsByAddress = null;
+                $this->addError('invalidSearch', 'The address must have a valid house number and a valid street to use the search function');
+                return;
+            }  
+        }
+
+
+        if ($contactsByAddress !== null) {
+            $fuseAddress  = new Fuse(
+                $contactsByAddress->flatten()->toArray(),
+                $addressOptions
+            );
+            $fuzzyAddressSearch = $fuseAddress->search($this->customer->service_address);
+        } else {
+            $fuzzyAddressSearch = [];
+        }
 
         $fuseName  = new Fuse(
             $contactsByName->flatten()->toArray(),
@@ -137,9 +103,7 @@ class FindContacts extends Component
 
 
 
-        if ($fuzzyNameAndAddressSearch !== []) {
-            $this->bestResults =  $fuzzyNameAndAddressSearch[0]['item'];
-        }
+
         if ($fuzzyNameSearch !== []) {
             foreach ($fuzzyNameSearch as $search) {
                 $this->possibleContacts['byName'][] =  $search['item'];
@@ -152,8 +116,7 @@ class FindContacts extends Component
             }
         }
 
-        $this->fuzzySearchComplete = false;
-        $this->emit('bestResultsFound', $this->bestResults);
+
         if (isset($this->possibleContacts)) {
             $this->emit('possibleContacts', $this->possibleContacts);
         }

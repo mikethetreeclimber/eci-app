@@ -17,7 +17,6 @@ class PossibleContactsList extends Component
     
     public function possibleContacts($possibleContacts)
     {
-        // dd($possibleContacts);
         $this->allPossibleContacts = $possibleContacts;
 
         $this->fuzzySearchSent = true;
@@ -31,13 +30,6 @@ class PossibleContactsList extends Component
         }elseif ($this->searchBy === 'byName') {
             $this->searchBy = 'byAddress';
         }
-        
-    }
-
-    public function searchBestResults()
-    {
-        $this->searchBy = 'bestResults';
-        $this->possibleContacts($this->allContacts);
         
     }
 
@@ -55,12 +47,8 @@ class PossibleContactsList extends Component
     {
      
         if (isset($this->allPossibleContacts)) {
-            if ($this->allPossibleContacts[$this->searchBy] !== []) {
-                $this->searchBy = $this->searchBy;
-            } else {
-                $this->searchBy = 'byName';
-            } 
-            $possibleContacts = $this->allPossibleContacts[$this->searchBy];
+         
+            $possibleContacts = $this->allPossibleContacts;
 
         } else {
             $possibleContacts = [];

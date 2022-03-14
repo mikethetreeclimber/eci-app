@@ -58,119 +58,96 @@
             </div>
         </x-slot:footer>
     </x-dialog-modal>
+
+    <x-confirmation-modal wire:model="noVerifiedContacts">
+        <x-slot:title>No Verified Contacts</x-slot:title>
+        <x-slot:content>Sorry, currently you are not able to add attempts without first verifying contacts for the
+            customer</x-slot:content>
+        <x-slot:footer>
+            <div class="space-x-2">
+                <x-danger-button wire:click="$set('noVerifiedContacts', false)">Cancel</x-danger-button>
+                <x-button wire:click="addVerifiedContact">Add Contact</x-button>
+            </div>
+        </x-slot:footer>
+    </x-confirmation-modal>
+
     <div class="flex items-center justify-between space-x-3">
         <h3 class="text-gray-900 text-md font-bold truncate">
             Attempts: <span>{{ $permissionsCount }}</span>
         </h3>
-        <x-button wire:click="$set('addAttemptModal', true)">Add Attempt</x-button>
+        <x-button wire:click="addAttempt">Add Attempt</x-button>
+    </div> 
+    <div class="@if ($permissions) h-40 @else h-20 @endif overflow-y-auto mt-4">
+        <div class="relative">
+            <ul role="list" class="divide-y divide-gray-200">
+                @forelse ($permissions as $permission)
+                    <li class="relative bg-white py-5 px-4 ">
+                        <div class="flex justify-between space-x-3">
+                            <div class="min-w-0 flex-1">
+                                <p class="text-sm font-medium text-gray-900"># {{ $permission->attempt_number }}</p>
+                            </div>
+                            <time datetime="{{ $permission->created_at }}"
+                                class="flex-shrink-0 whitespace-nowrap text-sm text-gray-900">
+                                {{ $permission->created_at->toDayDateTimeString() }}
+                            </time>
+                        </div>
+                        <div x-data="{permission: @js([
+                        $permission->created_at->toDayDateTimeString(),
+                        $permission->attempt_notes,
+                        $permission->attempt_type,
+                        ]) }" class="flex justify-between items-center">
+                            <p class="text-sm font-medium text-gray-900">Type: {{ $permission->attempt_type }}</p>
+                            <div class="flex justify-center items-center">
+                                {{-- ClipBoard --}}
+                                <button type="button"
+                                    class="hidden sm:flex sm:items-center sm:justify-center relative w-9 h-9 rounded-lg text-gray-400 hover:text-gray-600 group ml-2.5"
+                                    @click="navigator.clipboard.writeText(JSON.stringify(permission))">
+                                    <span class="sr-only">Copy attempt</span>
+                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                        class="stroke-current transform group-hover:rotate-[-4deg] transition"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                    </svg>
+                                </button>
+                                {{-- Delete --}}
+                                <button type="button" wire:click="remove({{ $permission->id }})"
+                                    class="hidden sm:flex sm:items-center sm:justify-center relative w-9 h-9 rounded-lg text-gray-400 hover:text-gray-600 group ml-2.5">
+                                    <span class="sr-only">Delete attempt</span>
+                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                        class="stroke-current transform group-hover:rotate-[-4deg] transition"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                                {{-- Edit --}}
+                                <button type="button" wire:click="edit({{ $permission->id }})"
+                                    class="hidden sm:flex sm:items-center sm:justify-center relative w-9 h-9 rounded-lg text-gray-400 hover:text-gray-600 group ml-2.5">
+                                    <span class="sr-only">Edit Attempt</span>
+                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                        class="stroke-current transform group-hover:rotate-[-4deg] transition"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-1">
+                            <p
+                                class="border flex flex-col border-gray-700 p-2 rounded-md bg-gray-200 shadow-lg line-clamp-2 text-sm text-gray-900">
+                                <span class="text-sm text-gray-500 truncate">Notes</span>
+                                {{ $permission->attempt_notes }}
+                            </p>
+                        </div>
+                    </li>
+                @empty
+                    <li class="py-5">
+                        <div class="mt-4 text-center font-bold text-base">No Permissioning Attempts To Show</div>
+                    </li>
+                @endforelse
+            </ul>
+        </div>
     </div>
-
-    <ul role="list" class="divide-y divide-gray-200">
-        @forelse ($permissions as $permission)
-            <li class="relative bg-white py-5 px-4 ">
-                <div class="flex justify-between space-x-3">
-                    <div class="min-w-0 flex-1">
-                        <p class="text-sm font-medium text-gray-900"># {{ $permission->attempt_number }}</p>
-                    </div>
-
-                    <time datetime="{{ $permission->created_at }}"
-                        class="flex-shrink-0 whitespace-nowrap text-sm text-gray-900">
-                        {{ $permission->created_at->toDayDateTimeString() }}
-                    </time>
-                </div>
-                <div x-data="{permission: @js([
-                    'date_time' => $permission->created_at->toDayDateTimeString().'/n',
-                    'notes' => $permission->attempt_notes,
-                    '/n',
-                    'type' => $permission->attempt_type,
-                    ]) }"
-                    class="flex justify-between items-center">
-                    <p class="text-sm font-medium text-gray-900">Type: {{ $permission->attempt_type }}</p>
-                    <button type="button"
-                        class="hidden sm:flex sm:items-center sm:justify-center relative w-9 h-9 rounded-lg text-gray-400 hover:text-gray-600 group ml-2.5"
-                        @click="navigator.clipboard.writeText(JSON.stringify(permission))">
-                        <span class="sr-only">Copy code</span>
-
-                        <svg aria-hidden="true" width="32" height="32" viewBox="0 0 32 32" fill="none"
-                            class="stroke-current transform group-hover:rotate-[-4deg] transition" style="">
-                            <path
-                                d="M12.9975 10.7499L11.7475 10.7499C10.6429 10.7499 9.74747 11.6453 9.74747 12.7499L9.74747 21.2499C9.74747 22.3544 10.6429 23.2499 11.7475 23.2499L20.2475 23.2499C21.352 23.2499 22.2475 22.3544 22.2475 21.2499L22.2475 12.7499C22.2475 11.6453 21.352 10.7499 20.2475 10.7499L18.9975 10.7499"
-                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                            <path
-                                d="M17.9975 12.2499L13.9975 12.2499C13.4452 12.2499 12.9975 11.8022 12.9975 11.2499L12.9975 9.74988C12.9975 9.19759 13.4452 8.74988 13.9975 8.74988L17.9975 8.74988C18.5498 8.74988 18.9975 9.19759 18.9975 9.74988L18.9975 11.2499C18.9975 11.8022 18.5498 12.2499 17.9975 12.2499Z"
-                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                            <path d="M13.7475 16.2499L18.2475 16.2499" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round"></path>
-                            <path d="M13.7475 19.2499L18.2475 19.2499" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round"></path>
-                            <g class="opacity-0 transition-opacity">
-                                <path d="M15.9975 5.99988L15.9975 3.99988" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                                <path d="M19.9975 5.99988L20.9975 4.99988" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                                <path d="M11.9975 5.99988L10.9975 4.99988" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                            </g>
-                        </svg>
-                    </button>
-                </div>
-                <div class="mt-1">
-                    <p
-                        class="border flex flex-col border-gray-700 p-2 rounded-md bg-gray-200 shadow-lg line-clamp-2 text-sm text-gray-900">
-                        <span class="text-sm text-gray-500 truncate">Notes</span>
-                        {{ $permission->attempt_notes }}
-
-                    </p>
-                </div>
-            </li>
-
-            {{-- <!-- More messages... -->
-    </ul>
-    <ul role="list" class="-my-5 divide-y divide-gray-200">
-        @forelse ($permissions as $permission)
-            <li class="py-5 grid grid-cols-3">
-                <div class="mt-2 col-span-2">
-                    <p class="mt-1 text-gray-700 text-base text-center">
-                        Attempt Number: {{ $permission->attempt_number }}
-                    </p>
-                </div>
-                <div class="mt-2 col-span-2">
-                    <p class="mt-1 text-gray-700 text-base text-center">
-                        Added: {{ $permission->created_at->diffForHumans() }}
-                    </p>
-                </div>
-                <div class="mt-2 col-span-2">
-                    <p class="mt-1 text-gray-700 text-base text-center">
-                        Attempt Type: {{ $permission->attempt_type }}
-                    </p>
-                </div>
-                <div class="mt-1 col-span-3 flex justify-center items-center">
-                    <div>
-                        <span class="text-sm text-gray-500 text-center">Attempt Notes:</span>
-                        <p class="mt-1 text-gray-700 text-base">
-                            {{ $permission->attempt_notes }}
-                        </p>
-                    </div>
-                </div>
-                <div class="relative focus-within:ring-2 focus-within:ring-indigo-500">
-                    <h3 class="text-sm font-semibold text-gray-800">
-                    </h3>
-                    <p class="mt-1 text-sm text-gray-600 line-clamp-2">
-
-
-                    </p>
-                </div>
-            </li> --}}
-        @empty
-            <li class="py-5">
-
-                <div class="mt-4 text-center font-bold text-base">No Permissioning Attempts To Show</div>
-            </li>
-        @endforelse
-    </ul>
-    <script>
-        function handleClick(e) {
-            console.log(e)
-        }
-    </script>
 </div>

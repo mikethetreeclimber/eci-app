@@ -1,5 +1,5 @@
 <div>
-    <div wire:init="findExistingPhoneFinder">
+    <div wire:init="searchForExistingContacts">
         <x-dialog-modal wire:model="existingPhoneFinderFound">
             <x-slot:title>Found Existing Phone Finder Data</x-slot:title>
             <x-slot:content>
@@ -37,90 +37,122 @@
                 <x-button wire:click="confirmExistingDataFinder">Confirm</x-button>
             </x-slot:footer>
         </x-dialog-modal>
+        <x-dialog-modal wire:model="existingVerifiedContactFound">
+            <x-slot:title>Found Existing Phone Finder Data</x-slot:title>
+            <x-slot:content>
+                @if ($verifiedContact !== null && $verifiedContact !== [])
+                    <div class="w-full flex items-center justify-between p-6 space-x-6">
+                        <div class="flex-1 truncate">
+                            <div class="flex items-center space-x-3">
+                                <h3 class="text-gray-900 text-md font-bold truncate">
+                                    {{ $verifiedContact[0]['customer_name'] }}</h3>
+                            </div>
+                            <span class="text-xs text-gray-500">Phone:</span>
+                            <p class="mt-1 text-gray-700 text-sm truncate">
+                                {{ $verifiedContact[0]['phone_one'] }}
+                            </p>
+                            <span class="text-xs text-gray-500">Address:</span>
+                            <p class="mt-1 text-gray-700 text-sm truncate">
+                                {{ $verifiedContact[0]['service_address'] }}
+                            </p>
+                            <p class="mt-1 text-gray-700 text-sm truncate">
+                                {{ $verifiedContact[0]['mailing_address'] }}
+                            </p>
+                        </div>
+                    </div>
+                @endif
+            </x-slot:content>
+            <x-slot:footer>
+                <x-button wire:click="confirmExistingVerifiedContact">Confirm</x-button>
+            </x-slot:footer>
+        </x-dialog-modal>
     </div>
     <x-dialog-modal wire:model="verifyModal">
         <x-slot:title>
             Confirm the Contact Information Before Verifying. <div>You can also edit the data before saving it.</div>
         </x-slot:title>
         <x-slot:content>
-            @if ($verifiedContact)
+            @if ($toBeVerified)
 
                 <div class="w-full flex items-center justify-between p-6 space-x-6">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <span class="text-xs text-gray-500">Customer Name:</span>
                             <p>
-                                <x-input type="text" wire:model.debounce="verifiedContact.customer_name" />
+                                <x-input type="text" wire:model.debounce="toBeVerified.customer_name" />
                             </p>
                         </div>
 
                         <div>
                             <span class="text-xs text-gray-500">Service Address:</span>
                             <p>
-                                <x-input type="text" wire:model.debounce="verifiedContact.service_address" />
+                                <x-input type="text" wire:model.debounce="toBeVerified.service_address" />
                             </p>
                         </div>
                         <div>
 
                             <span class="text-xs text-gray-500">Mailing Address:</span>
                             <p>
-                                <x-input type="text" wire:model.debounce="verifiedContact.mailing_address" />
+                                <x-input type="text" wire:model.debounce="toBeVerified.mailing_address" />
                             </p>
                         </div>
                         <div class="col-span-2 grid grid-cols-3">
                             <div class="col-span-3 text-center">
                                 Contact Information to Verify
                             </div>
-                            @foreach ($contacts as $key => $contact)
-                                <div class="col-span-1">
-                                    <span class="text-xs text-gray-500">{{ $key }}</span>
-                                    <p class="mt-1 text-gray-700 text-sm truncate">
-                                        {{ $contact }}
-                                    </p>
-                                </div>
-                            @endforeach
+                            @if ($contacts)
+
+                                @foreach ($contacts as $key => $contact)
+                                    <div class="col-span-1">
+                                        <span class="text-xs text-gray-500">{{ $key }}</span>
+                                        <p class="mt-1 text-gray-700 text-sm truncate">
+                                            {{ $contact }}
+                                        </p>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                         <div class="col-span-2 grid grid-cols-2 gap-4">
                             <div>
                                 <span class="text-xs text-gray-500">Phone One:</span>
                                 <p>
-                                    <x-input type="text" wire:model.debounce="verifiedContact.phone_one" />
+                                    <x-input type="text" wire:model.debounce="toBeVerified.phone_one" />
                                 </p>
                             </div>
                             <div>
                                 <span class="text-xs text-gray-500">Phone Two:</span>
                                 <p>
-                                    <x-input type="text" wire:model.debounce="verifiedContact.phone_two" />
+                                    <x-input type="text" wire:model.debounce="toBeVerified.phone_two" />
                                 </p>
                             </div>
                             <div>
                                 <span class="text-xs text-gray-500">Phone Three:</span>
                                 <p>
-                                    <x-input type="text" wire:model.debounce="verifiedContact.phone_three" />
+                                    <x-input type="text" wire:model.debounce="toBeVerified.phone_three" />
                                 </p>
                             </div>
                             <div>
                                 <span class="text-xs text-gray-500">Phone Four:</span>
                                 <p>
-                                    <x-input type="text" wire:model.debounce="verifiedContact.phone_four" />
+                                    <x-input type="text" wire:model.debounce="toBeVerified.phone_four" />
                                 </p>
                             </div>
                             <div>
                                 <span class="text-xs text-gray-500">Phone Five:</span>
                                 <p>
-                                    <x-input type="text" wire:model.debounce="verifiedContact.phone_five" />
+                                    <x-input type="text" wire:model.debounce="toBeVerified.phone_five" />
                                 </p>
                             </div>
                             <div>
                                 <span class="text-xs text-gray-500">Email:</span>
                                 <p>
-                                    <x-input type="text" wire:model.debounce="verifiedContact.email_address" />
+                                    <x-input type="text" wire:model.debounce="toBeVerified.email_address" />
                                 </p>
                             </div>
                             <div class="col-span-2">
                                 <span class="text-xs text-gray-500">Other Names:</span>
                                 <p>
-                                    <x-text-area model="verifiedContact.other_names" placeholder="Other Names" />
+                                    <x-text-area model="toBeVerified.other_names" placeholder="Other Names" />
                                 </p>
                             </div>
                         </div>
@@ -135,79 +167,33 @@
         </x-slot:footer>
     </x-dialog-modal>
     <div class="divide-y divide-gray-200 space-y-2">
+        <livewire:crm::circuit.customer.customer-best-results :customer="$customer" />
         <div x-data="{show: false}" class="w-full flex items-center justify-between space-x-6">
             <div class="flex-1 justify-center text-center space-y-2">
-                <div @click="show = !show" class="cursor-pointer w-full h-10 py-2 px-4 bg-gray-300 rounded-md shadow-md text-center">
+                <div @click="show = !show"
+                    class="cursor-pointer w-full h-10 py-2 px-4 bg-gray-300 rounded-md shadow-md text-center">
                     Show/Hide Fuzzy Search</div>
                 <div x-show="show" style="display: none">
                     <livewire:crm::circuit.customer.find-contacts :customer="$customer" :circuit="$circuit" />
-                    <br />
-                    If best results are found they will be displayed right below!
                 </div>
             </div>
         </div>
-        @if ($bestResults !== [] && $bestResults !== null)
-            <div>
-                <div class="mt-2 flex items-center justify-between space-x-3">
-                    <h3 class="text-gray-900 text-md font-bold truncate">
-                        Best Results
-                    </h3>
-                    <x-button wire:click="verify('bestResults')">Verify</x-button>
-                </div>
-                <span class="text-xs text-gray-500">Customer Name:</span>
-                <p class="mt-1 text-gray-700 text-sm truncate">
-                    {{ $bestResults['customer_name'] }}
-                </p>
-                <span class="text-xs text-gray-500">Primary Phone:</span>
-                <p class="mt-1 text-gray-700 text-sm truncate">
-                    <a href="tel:{{ $bestResults['primary_phone'] }}">{{ $bestResults['primary_phone'] }}</a>
-                </p>
-                @if ($bestResults['alt_phone'] !== null)
-                    <span class="text-xs text-gray-500">Alternative Phone:</span>
-                    <p class="mt-1 text-gray-700 text-sm truncate">
-                        {{ $bestResults['alt_phone'] }}
-                    </p>
-                @endif
-                @if ($bestResults['email_address'] !== null)
-                    <span class="text-xs text-gray-500">Email Address:</span>
-                    <p class="mt-1 text-gray-700 text-sm truncate">
-                        <a href="mailto:{{ $bestResults['email_address'] }}">
-                            {{ $bestResults['email_address'] }}
-                        </a>
-                    </p>
-                @endif
-            </div>
-        @endif
 
-        @if ($bestResults === [] && $bestResults !== null)
+
+        @if ($customer->phone_finder_used == true && $customer->phone_finder_id == null)
             <div class="w-full flex items-center justify-between p-6 space-x-6">
                 <div class="flex-1 justify-center text-center">
-                    It seems best results could not be found but there maybe possible contacts down
-                    below!
-                    <br />
-                    Click here to scroll to
-                    <x-nav-link href="#possibleContacts">Possible Contacts</x-nav-link>
-                    <br>
-                    OR
-                    <br>
-                    Use DataFinder
+                    <div class="flex justify-center items-center space-x-3 mb-3">
+                        Data Finder Has No Results
+                    </div>
+                    <span class="mt-3 text-xs text-gray-500">Powered By</span>
+                    <p class="text-gray-700 text-sm truncate">
+                        <x-nav-link href="https://datafinder.com">DataFinder API</x-nav-link>
+                    </p>
                 </div>
             </div>
-            @if ($customer->phone_finder_used == true && $customer->phone_finder_id == null)
-                <div class="w-full flex items-center justify-between p-6 space-x-6">
-                    <div class="flex-1 justify-center text-center">
-                        <div class="flex justify-center items-center space-x-3 mb-3">
-                            Data Finder Has No Results
-                        </div>
-                        <span class="mt-3 text-xs text-gray-500">Powered By</span>
-                        <p class="text-gray-700 text-sm truncate">
-                            <x-nav-link href="https://datafinder.com">DataFinder API</x-nav-link>
-                        </p>
-                    </div>
-                </div>
-            @endif
-
         @endif
+
         @if ($customer->phone_finder_used == false)
             <div class="w-full flex items-center justify-between p-6 space-x-6">
                 <div class="flex-1 justify-center text-center">

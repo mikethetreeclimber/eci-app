@@ -78,6 +78,8 @@ class CustomerHeader extends Component
         $this->customer->push();
         
         $this->editModal = false;
+
+        $this->emit('refreshCustomerDetails');
     }
 
     public function render()

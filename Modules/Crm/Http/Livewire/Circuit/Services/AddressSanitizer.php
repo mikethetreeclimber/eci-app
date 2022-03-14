@@ -26,6 +26,9 @@ class AddressSanitizer
         if (Str::contains(strtoupper($address), 'ROAD')) {
             return Str::replace('ROAD', 'RD', strtoupper($address));
         }
+        if (Str::contains(strtoupper($address), 'MOUNT')) {
+            return Str::replace('MOUNT', 'MT', strtoupper($address));
+        }
         return $address;
     }
 
