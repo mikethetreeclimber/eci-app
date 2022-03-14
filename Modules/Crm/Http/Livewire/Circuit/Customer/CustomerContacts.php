@@ -148,6 +148,7 @@ class CustomerContacts extends Component
                 return;
             }
         }
+        $this->findExistingPhoneFinder();
     }
 
     public function findExistingPhoneFinder()
@@ -155,7 +156,7 @@ class CustomerContacts extends Component
         if ((bool)$this->customer->phone_finder_used === false) {
 
             if (preg_match('~[0-9]+~', $this->customer->mailing_address)) {
-                $this->existingPhoneFinder = PhoneFinder::where('address', '=', $this->customer->mailing_address)
+                $this->existingPhoneFinder = PhoneFinder::where('address', 'LIKE', '%'.$this->customer->mailing_address.'%')
                     ->where('city', '=', $this->customer->city)
                     ->where('state', '=', $this->customer->state)
                     ->get()->toArray();
@@ -185,6 +186,7 @@ class CustomerContacts extends Component
             'phone_finder_used' => 1
         ]);
 
+        $this->emit('refreshCustomerDetails');
         $this->existingPhoneFinderFound = false;
     }
 
@@ -196,6 +198,7 @@ class CustomerContacts extends Component
         ]);
 
         $this->emit('verified');
+        $this->emit('refreshCustomerDetails');
 
         $this->existingVerifiedContactFound = false;
     }
@@ -259,9 +262,9 @@ class CustomerContacts extends Component
                     'first_name' => $first_name,
                     'middle_name' => $middle_name,
                     'last_name' => $last_name,
-                    'address' => $address,
-                    'city' => $city,
-                    'state' => $state,
+                    'address' => $this->customer->mailing_address,
+                    'city' => $this->customer->city,
+                    'state' => $this->customer->state,
                     'zip' => $zip,
                     'zip_4' => $zip4,
                     'country' => $country,

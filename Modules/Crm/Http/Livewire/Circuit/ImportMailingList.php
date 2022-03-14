@@ -56,8 +56,7 @@ class ImportMailingList extends Component
     public function destroyCustomers()
     {
         $this->setImportedAt();
-        Customers::where('circuit_id', '=', $this->circuit->id)
-            ->where('imported_at', '=', collect($this->customers)->first()['imported_at'])->delete();
+        Customers::where('circuit_id', '=', $this->circuit->id)->delete();
             
         $this->confirmDestroyCustomers = false;
     }

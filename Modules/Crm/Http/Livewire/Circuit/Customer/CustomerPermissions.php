@@ -58,6 +58,7 @@ class CustomerPermissions extends Component
         $data['circuit_id'] = $this->circuit->id;
         $data['user_id'] = auth()->id();
         $data['customer_id'] = $this->customer->id;
+        $data['verified_contact_id'] = $this->customer->verified_contact_id;
 
         Permission::updateOrCreate($data);
 

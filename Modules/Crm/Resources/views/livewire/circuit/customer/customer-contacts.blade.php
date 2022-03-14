@@ -1,5 +1,37 @@
 <div>
     <div wire:init="searchForExistingContacts">
+
+        <x-dialog-modal wire:model="existingVerifiedContactFound">
+            <x-slot:title>Found Existing Verified Contact Data</x-slot:title>
+            <x-slot:content>
+                @if ($verifiedContact !== null && $verifiedContact !== [])
+                    <div class="w-full flex items-center justify-between p-6 space-x-6">
+                        <div class="flex-1 truncate">
+                            <div class="flex items-center space-x-3">
+                                <h3 class="text-gray-900 text-md font-bold truncate">
+                                    {{ $verifiedContact[0]['customer_name'] }}</h3>
+                            </div>
+                            <span class="text-xs text-gray-500">Phone:</span>
+                            <p class="mt-1 text-gray-700 text-sm truncate">
+                                {{ $verifiedContact[0]['phone_one'] }}
+                            </p>
+                            <span class="text-xs text-gray-500">Address:</span>
+                            <p class="mt-1 text-gray-700 text-sm truncate">
+                                {{ $verifiedContact[0]['service_address'] }}
+                            </p>
+                            <p class="mt-1 text-gray-700 text-sm truncate">
+                                {{ $verifiedContact[0]['mailing_address'] }}
+                            </p>
+                        </div>
+                    </div>
+                @endif
+            </x-slot:content>
+            <x-slot:footer>
+                <x-button wire:click="confirmExistingVerifiedContact">Confirm</x-button>
+            </x-slot:footer>
+        </x-dialog-modal>
+    </div>
+    <div >
         <x-dialog-modal wire:model="existingPhoneFinderFound">
             <x-slot:title>Found Existing Phone Finder Data</x-slot:title>
             <x-slot:content>
@@ -37,36 +69,8 @@
                 <x-button wire:click="confirmExistingDataFinder">Confirm</x-button>
             </x-slot:footer>
         </x-dialog-modal>
-        <x-dialog-modal wire:model="existingVerifiedContactFound">
-            <x-slot:title>Found Existing Phone Finder Data</x-slot:title>
-            <x-slot:content>
-                @if ($verifiedContact !== null && $verifiedContact !== [])
-                    <div class="w-full flex items-center justify-between p-6 space-x-6">
-                        <div class="flex-1 truncate">
-                            <div class="flex items-center space-x-3">
-                                <h3 class="text-gray-900 text-md font-bold truncate">
-                                    {{ $verifiedContact[0]['customer_name'] }}</h3>
-                            </div>
-                            <span class="text-xs text-gray-500">Phone:</span>
-                            <p class="mt-1 text-gray-700 text-sm truncate">
-                                {{ $verifiedContact[0]['phone_one'] }}
-                            </p>
-                            <span class="text-xs text-gray-500">Address:</span>
-                            <p class="mt-1 text-gray-700 text-sm truncate">
-                                {{ $verifiedContact[0]['service_address'] }}
-                            </p>
-                            <p class="mt-1 text-gray-700 text-sm truncate">
-                                {{ $verifiedContact[0]['mailing_address'] }}
-                            </p>
-                        </div>
-                    </div>
-                @endif
-            </x-slot:content>
-            <x-slot:footer>
-                <x-button wire:click="confirmExistingVerifiedContact">Confirm</x-button>
-            </x-slot:footer>
-        </x-dialog-modal>
     </div>
+
     <x-dialog-modal wire:model="verifyModal">
         <x-slot:title>
             Confirm the Contact Information Before Verifying. <div>You can also edit the data before saving it.</div>
