@@ -5,7 +5,11 @@
         </x-slot>
     
         <x-slot name="description">
-            {{ __('Add your account\'s API Key.') }}
+            {{ __('Add your account\'s API Key with the link below.') }}
+            <br>
+            <br>
+            <br>
+            <a class="hover:underline hover:font-bold"href="https://datafinder.com" target="_blank" rel="noopener noreferrer">Data Finder Link</a>
         </x-slot>
     
         <x-slot name="form">
