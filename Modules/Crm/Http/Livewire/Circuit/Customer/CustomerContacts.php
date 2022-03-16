@@ -199,6 +199,8 @@ class CustomerContacts extends Component
 
         $this->emit('verified');
         $this->emit('refreshCustomerDetails');
+        $this->emit('verifiedContactFound', $this->verifiedContact[0]['id']);
+
 
         $this->existingVerifiedContactFound = false;
     }

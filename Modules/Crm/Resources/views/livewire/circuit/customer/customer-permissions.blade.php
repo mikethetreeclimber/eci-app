@@ -76,7 +76,7 @@
             Attempts: <span>{{ $permissionsCount }}</span>
         </h3>
         <x-button wire:click="addAttempt">Add Attempt</x-button>
-    </div> 
+    </div>
     <div class="@if ($permissions) h-40 @else h-20 @endif overflow-y-auto mt-4">
         <div class="relative">
             <ul role="list" class="divide-y divide-gray-200">
@@ -150,4 +150,49 @@
             </ul>
         </div>
     </div>
+    @if ($oldPermissions)
+        <div x-data="{oldPermissions: false}">
+            <div @click="oldPermissions = !oldPermissions" x-show="oldPermissions == false"
+                class="cursor-pointer w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
+                <span>Show Old Permissions</span>
+            </div>
+            <div x-show="oldPermissions" style="display: none" class="grid grid-cols-1">
+                <div class="sm:col-span-2 sm:text-center mb-4">
+                    <div @click="oldPermissions = !oldPermissions" x-show="oldPermissions"
+                        class="cursor-pointer w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
+                        <span>Hide Old Permissions</span>
+                    </div>
+                </div>
+                <div class="relative">
+                    <ul role="list" class="divide-y divide-gray-200">
+                        @foreach ($oldPermissions as $oldPermission)
+                            <li class="relative bg-white py-5 px-4">
+                                <div class="flex justify-between space-x-3">
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-sm font-medium text-gray-900">#
+                                            {{ $oldPermission->attempt_number }}</p>
+                                    </div>
+                                    <time datetime="{{ $oldPermission->created_at }}"
+                                        class="flex-shrink-0 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $oldPermission->created_at->toDayDateTimeString() }}
+                                    </time>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <p class="text-sm font-medium text-gray-900">Type:
+                                        {{ $oldPermission->attempt_type }}</p>
+                                </div>
+                                <div class="mt-1">
+                                    <p
+                                        class="border flex flex-col border-gray-700 p-2 rounded-md bg-gray-200 shadow-lg line-clamp-2 text-sm text-gray-900">
+                                        <span class="text-sm text-gray-500 truncate">Notes</span>
+                                        {{ $oldPermission->attempt_notes }}
+                                    </p>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

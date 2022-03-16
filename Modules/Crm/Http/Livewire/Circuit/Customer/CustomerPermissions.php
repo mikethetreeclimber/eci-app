@@ -13,6 +13,7 @@ class CustomerPermissions extends Component
     public $permissions;
     public $attempt_type;
     public $attempt_notes;
+    public $oldPermissions;
     public $attempt_number;
     public $permissionsCount;
     public $addAttemptModal = false;
@@ -25,12 +26,25 @@ class CustomerPermissions extends Component
     ];
 
     protected $listeners = [
-        'refreshSelf' => '$refresh'
+        'refreshSelf' => '$refresh',
+        'verifiedContactFound' => 'setOldPermissions'
     ];
 
     public function mount()
     {
         $this->permissionCount();
+        if ($this->customer->verifiedContact !== null) {
+        $this->setOldPermissions($this->customer->verifiedContact->id);
+        }
+    }
+
+    public function setOldPermissions($id)
+    {
+        if ($this->customer->verifiedContact !== null) {
+            $this->oldPermissions = Permission::where('verified_contact_id', '=', $id)->get();
+            $this->emit('refreshSelf');
+
+        }
     }
 
     public function permissionCount()
