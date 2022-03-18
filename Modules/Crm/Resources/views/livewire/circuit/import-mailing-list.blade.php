@@ -71,7 +71,7 @@
                     <option value="mailing_address">Mailing Address</option>
                     <option value="service_address">Service Address</option>
                 </select>
-                <x-input wire:model.debounce.1500ms="search" placeholder="Search Here" type="text" />
+                <x-input wire:model.debounce.500ms="search" placeholder="Search Here" type="text" />
 
             </div>
             @forelse ($customers as $customer)

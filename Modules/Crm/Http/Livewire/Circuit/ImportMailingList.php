@@ -39,6 +39,11 @@ class ImportMailingList extends Component
     public $importing;
     public $confirmDestroyCustomers = false;
     protected $allCustomers;
+    protected $queryString = [
+        'paginate',
+        'searchBy',
+        'search',
+    ];
 
     public function updatingMailing($value)
     {
@@ -49,6 +54,7 @@ class ImportMailingList extends Component
     }
 
     public function updatedPaginate() { $this->resetPage(); }
+    public function updatedSearch() { $this->resetPage(); }
     public function confirmDestroyCustomers()
     {
         $this->confirmDestroyCustomers = true;
