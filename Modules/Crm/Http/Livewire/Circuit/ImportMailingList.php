@@ -28,17 +28,17 @@ class ImportMailingList extends Component
     public Circuit $circuit;
     public $mailing;
     public $contacts;
-    public $customers;
+    public $search = '';
+    public $searchBy = 'last_name';
+    public $orderBy = 'last_name';
+    // public $orderDirection = 'DE';
+    public $paginate = 5;
     public $customersCount;
     public $importingContacts;
     public $permissionStatus = '';
-    public $importedAt = null;
-    public $take = 3;
-    public $skip = 0;
     public $importing;
     public $confirmDestroyCustomers = false;
     protected $allCustomers;
-    protected $queryString = ['skip'];
 
     public function updatingMailing($value)
     {
@@ -48,6 +48,7 @@ class ImportMailingList extends Component
         )->validate();
     }
 
+    public function updatedPaginate() { $this->resetPage(); }
     public function confirmDestroyCustomers()
     {
         $this->confirmDestroyCustomers = true;
@@ -55,41 +56,9 @@ class ImportMailingList extends Component
 
     public function destroyCustomers()
     {
-        $this->setImportedAt();
         Customers::where('circuit_id', '=', $this->circuit->id)->delete();
             
         $this->confirmDestroyCustomers = false;
-    }
-
-    public function setImportedAt()
-    {
-        $this->importedAt = collect($this->customers)->unique('imported_at')->pluck('imported_at')->first();
-    }
-
-    public function next()
-    {
-        // dd($this->customersCount / 3, 24/3,  $this);
-        // $this->take = $this->take += 3;
-        if ($this->skip !== 0) {
-            if ($this->skip > $this->customersCount) {
-                $this->skip = $this->customerCount;
-            } elseif ($this->skip / 3 < floor($this->customersCount / 3)) {
-                $this->skip = $this->skip += 3;
-            } else {
-                return;
-            }
-        } else {
-            $this->skip = $this->skip += 3;
-        }
-    }
-
-    public function back()
-    {
-        if ($this->skip > 1) {
-            $this->skip = $this->skip -= 3;
-        } else {
-            return;
-        }
     }
 
     public function updatedMailing()
@@ -114,23 +83,12 @@ class ImportMailingList extends Component
 
     public function render()
     {
-        $this->allCustomers = Customers::where('circuit_id', '=', $this->circuit->id)
-            ->when($this->importedAt !== null, function ($query) {
-                return $query->where('imported_at', $this->importedAt);
-            })->orderBy('last_name', 'DESC')->get();
-
-        $this->customers =  collect($this->allCustomers)->unique('last_name')
-            ->where('permission_status', 'like', $this->permissionStatus)
-            ->skip($this->skip)
-            ->take($this->take)
-            ->values()->all();
-
-        $this->customersCount =  collect($this->allCustomers)->unique('last_name')
-            ->where('permission_status', 'like', $this->permissionStatus)
-            ->count();
-
         return view('crm::livewire.circuit.import-mailing-list', [
-            'customers' => $this->customers,
+            'customers' => Customers::where('circuit_id', '=', $this->circuit->id)
+                ->where('permission_status', $this->permissionStatus)
+                ->search($this->searchBy, $this->search)
+                ->orderBy($this->orderBy)
+                ->paginate($this->paginate),
         ]);
     }
 }

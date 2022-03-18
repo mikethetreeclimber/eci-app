@@ -68,7 +68,7 @@
             <dt class="text-sm font-medium text-gray-500">Alt Phone</dt>
             <dd class="mt-1 text-sm text-gray-900">570-222-3333</dd>
         </div> --}}
-    <div wire:init="stationDataGetter" x-data="{stationData: false}" class="sm:col-span-2">
+    <div wire:init="stationDataGetter" x-data="{stationData: true}" class="sm:col-span-2">
         <div @click="stationData = !stationData" x-show="stationData == false"
             class="cursor-pointer w-full h-10 border border-gray-600 hover:bg-gray-300 flex justify-center items-center font-bold text-lg rounded-md">
             <span>Show Station Data</span>

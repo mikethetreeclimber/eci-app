@@ -7,6 +7,7 @@ use Illuminate\Log\Logger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Queue\Events\JobProcessed;
 
 class AppServiceProvider extends ServiceProvider
@@ -50,11 +51,8 @@ class AppServiceProvider extends ServiceProvider
             $this->dispatchBrowserEvent('danger', $message);
         });
 
-        Queue::after(function (JobProcessed $event) {
-            info($event);
-            // $event->connectionName
-            // $event->job
-            // $event->job->payload()
+        Builder::macro('search', function ($field, $string) {
+            return $string ? $this->where($field, 'like', '%'.$string.'%') : $this;
         });
     }
 }
