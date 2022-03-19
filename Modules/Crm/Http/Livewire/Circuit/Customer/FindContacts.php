@@ -45,7 +45,7 @@ class FindContacts extends Component
             'ignoreLocation' => true,
             'threshold' => 0.4,
             'includeScore' => true,
-            'keys' => ['service_address', 'mailing_address'],
+            'keys' => ['physical_address', 'mailing_address'],
         ];
         $nameOptions = [
             'ignoreLocation' => true,
@@ -54,16 +54,11 @@ class FindContacts extends Component
             'keys' => ['customer_name'],
         ];
 
-        // if (!preg_match('~[0-9]+~', $this->customer->physical_address)){
-        // }
-
-
-        $contactsByName = Contacts::where('customer_name', 'LIKE', '%' . $this->customer->last_name)->get();
-
+        $contactsByName = Contacts::search('customer_name', $this->customer->last_name)->get();
 
         if ($this->searchBy === 'physical_address') {
             if (preg_match('~[0-9]+~', $this->customer->physical_address)) {
-                $contactsByAddress = Contacts::where($this->search, 'LIKE', '%' . $this->customer->service_address . '%')
+                $contactsByAddress = Contacts::search($this->search,  $this->customer->physical_address)
                     ->get();
             } else {
                 $contactsByAddress = null;
@@ -74,7 +69,7 @@ class FindContacts extends Component
 
         if ($this->searchBy === 'mailing_address') {
             if (preg_match('~[0-9]+~', $this->customer->mailing_address)) {
-                $contactsByAddress = Contacts::where($this->search, 'LIKE', '%' . $this->customer->mailing_address . '%')
+                $contactsByAddress = Contacts::search($this->search, $this->customer->mailing_address)
                     ->get();
             } else {
                 $contactsByAddress = null;

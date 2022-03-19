@@ -7,24 +7,24 @@
                 </h3>
                 <x-button wire:click="$emit('verify', 'bestResults', {{ $bestResults['id'] }})">Verify</x-button>
             </div>
-            @if ($bestResults['customer_name'] !== null)
-                <span class="text-xs text-gray-500">Customer Name:</span>
-                <p class="mt-1 text-gray-700 text-sm truncate">
-                    {{ $bestResults['customer_name'] }}
-                </p>
-            @endif
-            @if ($bestResults['primary_phone'] !== null)
-                <span class="text-xs text-gray-500">Primary Phone:</span>
-                <p class="mt-1 text-gray-700 text-sm truncate">
-                    <a href="tel:{{ $bestResults['primary_phone'] }}">{{ $bestResults['primary_phone'] }}</a>
-                </p>
-            @endif
-            @if ($bestResults['alt_phone'] !== null)
-                <span class="text-xs text-gray-500">Alternative Phone:</span>
-                <p class="mt-1 text-gray-700 text-sm truncate">
-                    {{ $bestResults['alt_phone'] }}
-                </p>
-            @endif
+            <div class="mt-2 flex items-center justify-evenly space-x-3">
+            <div>
+                @if ($bestResults['primary_phone'] !== null)
+                    <span class="text-xs text-gray-500">Primary Phone:</span>
+                    <p class="mt-1 text-gray-700 text-sm truncate">
+                        <a href="tel:{{ $bestResults['primary_phone'] }}">{{ $bestResults['primary_phone'] }}</a>
+                    </p>
+                @endif
+            </div>
+            <div>
+                @if ($bestResults['alt_phone'] !== null)
+                    <span class="text-xs text-gray-500">Alternative Phone:</span>
+                    <p class="mt-1 text-gray-700 text-sm truncate">
+                        {{ $bestResults['alt_phone'] }}
+                    </p>
+                @endif
+            </div>
+            </div>
             @if ($bestResults['email_address'] !== null)
                 <span class="text-xs text-gray-500">Email Address:</span>
                 <p class="mt-1 text-gray-700 text-sm truncate">

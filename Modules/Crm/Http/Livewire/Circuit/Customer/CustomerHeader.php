@@ -2,13 +2,8 @@
 
 namespace Modules\Crm\Http\Livewire\Circuit\Customer;
 
-use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
-use Modules\Crm\Entities\Circuit;
 use Modules\Crm\Entities\Customers;
-use Illuminate\Support\Facades\Http;
-use Modules\Crm\Entities\PhoneFinder;
-use Modules\Crm\Http\Livewire\Circuit\Services\PhoneNumberFormattor;
 
 
 class CustomerHeader extends Component
@@ -17,19 +12,20 @@ class CustomerHeader extends Component
     public $customer;
     public $editModal = false;
     public $refusalModal = false;
+    public $customerRowsToUpdate;
     public $approvalModal = false;
     public $noContactModal = false;
     public $notApprovedModal = false;
 
     protected $rules = [
-        'customer.first_name' => 'required',
-        'customer.last_name' => 'required',
-        'customer.mailing_address' => 'required',
-        'customer.city' => 'required',
-        'customer.state' => 'required',
-        'customer.physical_address' => 'required',
-        'customer.physical_city' => 'required',
-        'customer.physical_state' => 'required',
+        'customer.first_name' => 'present',
+        'customer.last_name' => 'present',
+        'customer.mailing_address' => 'present',
+        'customer.city' => 'present',
+        'customer.state' => 'present',
+        'customer.physical_address' => 'present',
+        'customer.physical_city' => 'present',
+        'customer.physical_state' => 'present',
     ];
 
     public function mount()
@@ -75,8 +71,19 @@ class CustomerHeader extends Component
 
     public function editCustomer()
     {
-        $this->customer->push();
-        
+        $data = $this->validate();
+         
+        $this->customerRowsToUpdate->toQuery()->update([
+            'first_name' => $data['customer']['first_name'],
+            'last_name' => $data['customer']['last_name'],
+            'mailing_address' => $data['customer']['mailing_address'],
+            'city' => $data['customer']['city'],
+            'state' => $data['customer']['state'],
+            'physical_address' => $data['customer']['physical_address'],
+            'physical_city' => $data['customer']['physical_city'],
+            'physical_state' => $data['customer']['physical_state'],
+        ]);
+
         $this->editModal = false;
 
         $this->emit('refreshCustomerDetails');
@@ -84,6 +91,12 @@ class CustomerHeader extends Component
 
     public function render()
     {
+        $this->customerRowsToUpdate = Customers::where('first_name', $this->customer->first_name)
+            ->where('last_name', $this->customer->last_name)
+            ->where('mailing_address', $this->customer->mailing_address)
+            ->where('physical_address', $this->customer->physical_address)
+            ->get();
+
         return view('crm::livewire.circuit.customer.customer-header');
     }
 }

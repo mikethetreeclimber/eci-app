@@ -17,7 +17,6 @@ class CustomerBestResults extends Component
 
     public function bestResultsSearch()
     {
-        sleep(2);
         if ($this->customer->verifiedContact === null) {
 
             $nameOptions = [
@@ -64,79 +63,10 @@ class CustomerBestResults extends Component
             $this->bestResults = [];
         }
 
-        
-       
-
     }
 
     public function render()
     {
         return view('crm::livewire.circuit.customer.customer-best-results');
     }
-};
-// dd($contactsByAddress, $this->customer);
-// $contactsByNameAndAddress = Contacts::where('customer_name', 'LIKE', '%' . $this->customer->name .'%')
-//     ->where('service_address', 'LIKE', '%' . $this->customer->physical_address . '%')
-//     ->where('service_address', 'LIKE', '%' . $this->customer->physical_city . '%')
-//     ->where('service_address', 'LIKE', '%' . $this->customer->physical_state . '%')
-//     ->get();
-
-//     dd($contactsByNameAndAddress);
-// //
-
-
-
-// $fuzzyNameAndAddressSearch = $fuseNameAndAddress->search($this->customer->service_address);
-        // if (!preg_match('~[0-9]+~', $this->customer->mailing_address) && preg_match('~[0-9]+~', $this->customer->physical_address)) {
-        // if (preg_match('~[0-9]+~', $this->customer->mailing_address) && !preg_match('~[0-9]+~', $this->customer->physical_address)) {
-
-
-
-
-
-        //     $contactsByNameAndAddress = Contacts::select()
-        //         ->where('customer_name', 'LIKE',  '%' . $this->customer->last_name)
-        //         ->where('mailing_address', 'LIKE', '%' .   $this->customer->service_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->get();
-
-        //     $contactsByAddress = Contacts::select()
-        //         ->where('service_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->orWhere('mailing_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->get();
-
-        // } 
-
-        //     $contactsByNameAndAddress = Contacts::select()
-        //         ->where('customer_name', 'LIKE',  '%' . $this->customer->last_name)
-        //         ->where('mailing_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->get();
-
-        //     $contactsByAddress = Contacts::select()
-        //         ->where('mailing_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->get();
-
-        // } 
-        // if (preg_match('~[0-9]+~', $this->customer->mailing_address) && preg_match('~[0-9]+~', $this->customer->physical_address)) {
-
-        //     $contactsByNameAndAddress = Contacts::select()
-        //         ->where('customer_name', 'LIKE',  '%' . $this->customer->last_name)
-        //         ->where('mailing_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->orWhere('mailing_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->get();
-
-        //     $contactsByAddress = Contacts::select()
-        //         ->where('mailing_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->orWhere('mailing_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->service_address . '%')
-        //         ->orWhere('service_address', 'LIKE', '%' . $this->customer->full_mailing_address . '%')
-        //         ->get();
-        // 
-    // } if ($fuzzyNameAndAddressSearch !== []) {
-    //         $this->bestResults =  $fuzzyNameAndAddressSearch[0]['item'];
-    //     }
-    //     $this->fuzzySearchComplete = false;
-    //     $this->emit('bestResultsFound', $this->bestResults);
+}

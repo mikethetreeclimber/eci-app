@@ -2,13 +2,6 @@
 
 namespace Modules\Crm\Http\Livewire\Circuit;
 
-use Illuminate\Bus\Batch;
-use Illuminate\Foundation\Bus\PendingDispatch;
-use Illuminate\Queue\Events\JobProcessing;
-use Illuminate\Queue\Jobs\Job;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Queue;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -19,26 +12,34 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Modules\Crm\Imports\ContactListImport;
 use Modules\Crm\Imports\MailingListImport;
-use Modules\Crm\Jobs\Contacts\ImportContactsJob;
 
 class ImportMailingList extends Component
 {
     use WithFileUploads, WithPagination;
 
-    public Circuit $circuit;
     public $mailing;
     public $contacts;
+    public $importing;
     public $search = '';
-    public $searchBy = 'last_name';
-    public $orderBy = 'last_name';
-    // public $orderDirection = 'DE';
     public $paginate = 5;
     public $customersCount;
+    public Circuit $circuit;
     public $importingContacts;
     public $permissionStatus = '';
-    public $importing;
+    public $orderBy = 'last_name';
+    public $searchBy = 'last_name';
+    public $orderDirection = 'ASC';
     public $confirmDestroyCustomers = false;
-    protected $allCustomers;
+
+    public $searchables = [
+        'first_name' => 'First Name',
+        'last_name' => 'Last Name',
+        'station_name' => 'Station Name',
+        'unit' => 'Unit',
+        'mailing_address' => 'Mailing Address',
+        'physical_address' => 'Physical Address'
+    ];
+
     protected $queryString = [
         'paginate',
         'searchBy',
@@ -55,6 +56,7 @@ class ImportMailingList extends Component
 
     public function updatedPaginate() { $this->resetPage(); }
     public function updatedSearch() { $this->resetPage(); }
+    
     public function confirmDestroyCustomers()
     {
         $this->confirmDestroyCustomers = true;
@@ -93,8 +95,10 @@ class ImportMailingList extends Component
             'customers' => Customers::where('circuit_id', '=', $this->circuit->id)
                 ->where('permission_status', $this->permissionStatus)
                 ->search($this->searchBy, $this->search)
-                ->orderBy($this->orderBy)
+                ->orderBy($this->orderBy, $this->orderDirection)
                 ->paginate($this->paginate),
+            'customerCount' =>  Customers::where('circuit_id', '=', $this->circuit->id)
+                ->count(),
         ]);
     }
 }

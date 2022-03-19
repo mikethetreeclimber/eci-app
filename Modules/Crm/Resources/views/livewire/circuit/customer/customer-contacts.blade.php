@@ -171,8 +171,8 @@
         </x-slot:footer>
     </x-dialog-modal>
     <div class="divide-y divide-gray-200 space-y-2">
-        <livewire:crm::circuit.customer.customer-best-results :customer="$customer" />
-        <div x-data="{show: false}" class="w-full flex items-center justify-between space-x-6">
+        {{-- <livewire:crm::circuit.customer.customer-best-results :customer="$customer" /> --}}
+        <div x-data="{show: true}" class="w-full flex items-center justify-between space-x-6">
             <div class="flex-1 justify-center text-center space-y-2">
                 <div @click="show = !show"
                     class="cursor-pointer w-full h-10 py-2 px-4 bg-gray-300 rounded-md shadow-md text-center">
@@ -223,7 +223,7 @@
                     <h3 class="text-gray-900 text-md font-bold truncate">
                         Data Finder
                     </h3>
-                    <x-button wire:click="verify('customer' )">Verify</x-button>
+                    <x-button wire:click="verify('customer')">Verify</x-button>
                 </div>
                 <span class="text-xs text-gray-500">Customer Name:</span>
                 <p class="mt-1 text-gray-700 text-sm truncate">
