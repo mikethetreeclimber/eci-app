@@ -23,8 +23,9 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    $customersCount = Customers::count();
-    $permissionCount = Permission::count();
-    $activeCircuits = Circuit::count();
+    // dd(auth()->user()->customers);
+    $customersCount = auth()->user()->customers->count();
+    $permissionCount = auth()->user()->permissions->count();
+    $activeCircuits = auth()->user()->circuits->count();
     return view('dashboard', compact('customersCount', 'permissionCount', 'activeCircuits'));
 })->name('dashboard');
