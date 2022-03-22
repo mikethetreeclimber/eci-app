@@ -10,6 +10,7 @@ class CustomerHeader extends Component
 {
     public $circuit;
     public $customer;
+    public $unitsToApprove;
     public $editModal = false;
     public $refusalModal = false;
     public $customerRowsToUpdate;
@@ -28,6 +29,10 @@ class CustomerHeader extends Component
         'customer.physical_state' => 'present',
     ];
 
+    protected $listeners = [
+        'refreshCustomerHeader' => '$refresh'
+    ];
+    
     public function mount()
     {
         // dd($this->customer);

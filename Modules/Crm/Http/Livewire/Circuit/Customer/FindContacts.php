@@ -45,7 +45,7 @@ class FindContacts extends Component
             'ignoreLocation' => true,
             'threshold' => 0.4,
             'includeScore' => true,
-            'keys' => ['physical_address', 'mailing_address'],
+            'keys' => ['service_address', 'mailing_address'],
         ];
         $nameOptions = [
             'ignoreLocation' => true,
@@ -84,7 +84,11 @@ class FindContacts extends Component
                 $contactsByAddress->flatten()->toArray(),
                 $addressOptions
             );
-            $fuzzyAddressSearch = $fuseAddress->search($this->customer->service_address);
+            if ($this->searchBy === 'mailing_address') {
+            $fuzzyAddressSearch = $fuseAddress->search($this->customer->mailing_address);
+            } elseif ($this->searchBy === 'physical_address') {
+                $fuzzyAddressSearch = $fuseAddress->search($this->customer->physical_address);
+            }
         } else {
             $fuzzyAddressSearch = [];
         }

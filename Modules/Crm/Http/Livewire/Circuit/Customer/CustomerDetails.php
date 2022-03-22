@@ -18,9 +18,30 @@ class CustomerDetails extends Component
         'stationData.*.permission_status'
     ];
     
+    // public function approveAll($unit)
+    // {
+    //    dd($this->stationData->toArray()[$unit]);
+    // }
+
+    public function setPermissionStatus(Customers $station)
+    {
+        if ($station->permission_status === '') {
+            $station->update([
+                'permission_status' => 'Approved'
+            ]);
+        } elseif ($station->permission_status === 'Approved') {
+            $station->update([
+                'permission_status' => ''
+            ]);
+        }
+
+        $this->emit('refreshCustomerDetails');
+        $this->emit('refreshCustomerHeader');
+    }
+
     public function render()
     {
-        $stationData = Customers::select('station_name', 'unit', 'permission_status')
+        $stationData = Customers::select('id', 'station_name', 'unit', 'permission_status')
         ->where('first_name', 'LIKE', '%'.$this->customer->first_name.'%')
         ->where('last_name', 'LIKE', '%'.$this->customer->last_name.'%')
         ->where('physical_address', 'LIKE', '%'.$this->customer->physical_address.'%')

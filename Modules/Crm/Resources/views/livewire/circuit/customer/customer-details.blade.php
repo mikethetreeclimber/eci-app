@@ -90,8 +90,10 @@
                                     <div x-show="open == true" class="space-y-1">
                                         <div class="flex justify-center items-center space-y-1">
                                             <p for="email" class="block text-sm font-medium text-gray-700">
-                                                <x-permission-badge size="xs"
-                                                    :permissionStatus="$station->permission_status" />
+                                                <button wire:click="setPermissionStatus({{ $station->id }})">
+                                                    <x-permission-badge size="xs"
+                                                        :permissionStatus="$station->permission_status" />
+                                                </button>
                                                 <span>{{ $station->station_name }}</span>
                                             </p>
                                         </div>
