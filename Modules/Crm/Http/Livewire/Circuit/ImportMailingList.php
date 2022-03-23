@@ -41,6 +41,8 @@ class ImportMailingList extends Component
     ];
 
     protected $queryString = [
+        'permissionStatus',
+        'orderBy',
         'paginate',
         'searchBy',
         'search',

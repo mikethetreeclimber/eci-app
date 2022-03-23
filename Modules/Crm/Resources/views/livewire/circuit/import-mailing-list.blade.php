@@ -39,8 +39,8 @@
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
         <ul role="list" class="divide-y divide-gray-200">
 
-            <div class="sm:flex justify-center items-center space-y-2 m-2 sm:space-x-4 sm:m-4">
-                @if ($customers)
+            <div class="sm:flex justify-center items-center m-2 sm:space-x-4 sm:m-4">
+                <div>
                     <label for="permissionStatus" class="block text-sm font-medium text-gray-700">Sort By</label>
                     <select wire:model="permissionStatus" id="permissionStatus" name="permissionStatus"
                         class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
@@ -52,36 +52,45 @@
                         <option value="Defered">Defered</option>
                         <option value="Show All">Show All</option>
                     </select>
-                @endif
+                </div>
 
-                <label for="orderBy" class="block text-sm font-medium text-gray-700">Order By</label>
-                <select wire:model="orderBy" id="orderBy" name="orderBy"
-                    class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
-                    <option value="station_name">Station Name</option>
-                    <option value="unit">Unit</option>
-                    <option value="last_name">Last Name</option>
-                    <option value="physical_address">Service Address</option>
-                    <option value="physical_city">Service City</option>
-                </select>
+                <div>
+                    <label for="orderBy" class="block text-sm font-medium text-gray-700">Order By</label>
+                    <select wire:model="orderBy" id="orderBy" name="orderBy"
+                        class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
+                        <option value="station_name">Station Name</option>
+                        <option value="unit">Unit</option>
+                        <option value="last_name">Last Name</option>
+                        <option value="physical_address">Service Address</option>
+                        <option value="physical_city">Service City</option>
+                    </select>
+                </div>
 
-                <label for="paginate" class="block text-sm font-medium text-gray-700">Show</label>
-                <select wire:model="paginate" id="paginate" name="paginate"
-                    class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                    <option value="{{ $customerCount }}">Show All</option>
-                </select>
+                <div>
+                    <label for="paginate" class="block text-sm font-medium text-gray-700">Show</label>
+                    <select wire:model="paginate" id="paginate" name="paginate"
+                        class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="{{ $customerCount }}">Show All</option>
+                    </select>
+                </div>
 
-                <label for="searchBy" class="block text-sm font-medium text-gray-700">Search By</label>
-                <select wire:model="searchBy" id="searchBy" name="searchBy"
-                    class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
-                    @foreach ($searchables as $key => $searchable)
-                        <option value="{{ $key }}">{{ $searchable }}</option>
-                    @endforeach
-                </select>
-                <x-input wire:model.debounce.1000ms="search" placeholder="Search Here" type="text" />
+                <div>
+                    <label for="searchBy" class="block text-sm font-medium text-gray-700">Search By</label>
+                    <select wire:model="searchBy" id="searchBy" name="searchBy"
+                        class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
+                        @foreach ($searchables as $key => $searchable)
+                            <option value="{{ $key }}">{{ $searchable }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label for="search" class="block text-sm font-medium text-gray-700">Search</label>
+                    <x-input wire:model.debounce.1000ms="search" type="text" />
+                </div>
 
 
             </div>
