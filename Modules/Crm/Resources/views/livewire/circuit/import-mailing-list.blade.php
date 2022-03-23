@@ -1,5 +1,5 @@
 <div class="m-4 space-y-4">
-    <div wire:loading.delay="contacts">
+    <div wire:loading.delay="mailing">
         <x-loading />
     </div>
     <div class="pb-5 border-b border-green-200 sm:flex sm:items-center sm:justify-between">
