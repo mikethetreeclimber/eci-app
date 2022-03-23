@@ -32,14 +32,20 @@
         </x-slot:title>
         <x-slot:content>Are You Sure? This cannot be undone </x-slot:content>
         <x-slot:footer>
-            <x-danger-button wire:click="$set('confirmDestroyCustomers', 'false')">Cancel</x-danger-button>
-            <x-button wire:click="destroyCustomers">Confim</x-button>
+            <div class="space-x-2">
+                <x-danger-button type="button" wire:click="$set('confirmDestroyCustomers', false)">Cancel</x-danger-button>
+                <x-button wire:click="destroyCustomers">Confim</x-button>
+            </div>
         </x-slot:footer>
     </x-confirmation-modal>
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
         <ul role="list" class="divide-y divide-gray-200">
 
             <div class="sm:flex justify-center items-center m-2 sm:space-x-4 sm:m-4">
+                <div class="mr-6 space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Delete Customers</label>
+                    <x-danger-button wire:click="$set('confirmDestroyCustomers', true)">Destroy</x-danger-button>
+                </div>
                 <div>
                     <label for="permissionStatus" class="block text-sm font-medium text-gray-700">Sort By</label>
                     <select wire:model="permissionStatus" id="permissionStatus" name="permissionStatus"
