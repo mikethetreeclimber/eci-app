@@ -60,6 +60,8 @@ class FindContacts extends Component
         if ($this->searchBy === 'physical_address') {
             if (preg_match('~[0-9]+~', $this->customer->physical_address)) {
                 $contactsByAddress = Contacts::search($this->search,  $this->customer->physical_address)
+                    ->search($this->search,  $this->customer->physical_city)
+                    ->search($this->search,  $this->customer->physical_state)
                     ->get();
             } else {
                 $contactsByAddress = null;
@@ -71,12 +73,14 @@ class FindContacts extends Component
         if ($this->searchBy === 'mailing_address') {
             if (preg_match('~[0-9]+~', $this->customer->mailing_address)) {
                 $contactsByAddress = Contacts::search($this->search, $this->customer->mailing_address)
+                    ->search($this->search,  $this->customer->city)
+                    ->search($this->search,  $this->customer->state)
                     ->get();
             } else {
                 $contactsByAddress = null;
                 $this->addError('invalidSearch', 'The address must have a valid house number and a valid street to use the search function');
                 return;
-            }  
+            }
         }
 
 
@@ -86,7 +90,7 @@ class FindContacts extends Component
                 $addressOptions
             );
             if ($this->searchBy === 'mailing_address') {
-            $fuzzyAddressSearch = $fuseAddress->search($this->customer->mailing_address);
+                $fuzzyAddressSearch = $fuseAddress->search($this->customer->mailing_address);
             } elseif ($this->searchBy === 'physical_address') {
                 $fuzzyAddressSearch = $fuseAddress->search($this->customer->physical_address);
             }

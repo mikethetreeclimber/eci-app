@@ -64,7 +64,7 @@
                     <label for="orderBy" class="block text-sm font-medium text-gray-700">Order By</label>
                     <select wire:model="orderBy" id="orderBy" name="orderBy"
                         class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
-                        <option value="station_name">Station Name</option>
+                        <option value="station_name">Station Number</option>
                         <option value="unit">Unit</option>
                         <option value="last_name">Last Name</option>
                         <option value="physical_address">Service Address</option>
