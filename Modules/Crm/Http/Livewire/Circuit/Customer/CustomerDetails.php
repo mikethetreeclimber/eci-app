@@ -42,11 +42,11 @@ class CustomerDetails extends Component
     public function render()
     {
         $stationData = Customers::select('id', 'station_name', 'unit', 'permission_status')
-        ->where('first_name', 'LIKE', '%'.$this->customer->first_name.'%')
-        ->where('last_name', 'LIKE', '%'.$this->customer->last_name.'%')
-        ->where('physical_address', 'LIKE', '%'.$this->customer->physical_address.'%')
-        ->where('physical_city', 'LIKE', '%'.$this->customer->physical_city.'%')
-        ->where('physical_state', 'LIKE', '%'.$this->customer->physical_state.'%')
+        ->where('first_name', $this->customer->first_name)
+        ->where('last_name', $this->customer->last_name)
+        ->where('mailing_address', $this->customer->mailing_address)
+        ->where('city', $this->customer->city)
+        ->where('state', $this->customer->state)
         ->get();
 
         $this->stationData = collect($stationData)->groupBy('unit');

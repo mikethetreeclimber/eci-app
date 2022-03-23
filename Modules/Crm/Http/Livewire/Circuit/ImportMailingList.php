@@ -91,14 +91,21 @@ class ImportMailingList extends Component
 
     public function render()
     {
-        return view('crm::livewire.circuit.import-mailing-list', [
-            'customers' => Customers::where('circuit_id', '=', $this->circuit->id)
+        if ( $this->permissionStatus === 'Show All') {
+            $customers = Customers::where('circuit_id', '=', $this->circuit->id)
+                ->search($this->searchBy, $this->search)
+                ->orderBy($this->orderBy, $this->orderDirection)
+                ->paginate($this->paginate);
+        } else {
+            $customers = Customers::where('circuit_id', '=', $this->circuit->id)
                 ->where('permission_status', $this->permissionStatus)
                 ->search($this->searchBy, $this->search)
                 ->orderBy($this->orderBy, $this->orderDirection)
-                ->paginate($this->paginate),
-            'customerCount' =>  Customers::where('circuit_id', '=', $this->circuit->id)
-                ->count(),
-        ]);
+                ->paginate($this->paginate);
+        }
+
+        $customerCount = Customers::where('circuit_id', '=', $this->circuit->id)
+                ->count();
+        return view('crm::livewire.circuit.import-mailing-list', compact('customers', 'customerCount'));
     }
 }

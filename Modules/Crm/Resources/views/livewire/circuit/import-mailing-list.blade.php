@@ -26,21 +26,6 @@
             </div> --}}
         </div>
     </div>
-    <div class="space-x-4 flex">
-        @if ($customers)
-            <span>
-                <x-button wire:click="$set('permissionStatus', 'Approved')">
-                    All Approved
-                </x-button>
-            </span>
-            <span>
-                <x-danger-button wire:click="$set('permissionStatus', '')">
-                    Not Approved
-                </x-danger-button>
-            </span>
-            <x-warning-button wire:click="confirmDestroyCustomers">Destroy Customers</x-warning-button>
-        @endif
-    </div>
     <x-confirmation-modal wire:model="confirmDestroyCustomers">
         <x-slot:title>
             Destroy All Customers
@@ -55,6 +40,19 @@
         <ul role="list" class="divide-y divide-gray-200">
 
             <div class="sm:flex justify-center items-center space-y-2 m-2 sm:space-x-4 sm:m-4">
+                    @if ($customers)
+                        <label for="permissionStatus" class="block text-sm font-medium text-gray-700">Sort By</label>
+                        <select wire:model="permissionStatus" id="permissionStatus" name="permissionStatus"
+                            class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
+                            <option value="Approved">Approved</option>
+                            <option value="">Not Approved</option>
+                            <option value="PPL Approved">PPL Approved</option>
+                            <option value="Refused">Refused</option>
+                            <option value="No Contact">No Contact</option>
+                            <option value="Defered">Defered</option>
+                            <option value="Show All">Show All</option>
+                        </select>
+                    @endif
                 <label for="paginate" class="block text-sm font-medium text-gray-700">Show</label>
                 <select wire:model="paginate" id="paginate" name="paginate"
                     class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
@@ -69,11 +67,11 @@
                 <select wire:model="searchBy" id="searchBy" name="searchBy"
                     class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
                     @foreach ($searchables as $key => $searchable)
-                    <option value="{{ $key }}">{{ $searchable }}</option>
+                        <option value="{{ $key }}">{{ $searchable }}</option>
                     @endforeach
                 </select>
                 <x-input wire:model.debounce.1000ms="search" placeholder="Search Here" type="text" />
-            
+
 
             </div>
             @forelse ($customers as $customer)

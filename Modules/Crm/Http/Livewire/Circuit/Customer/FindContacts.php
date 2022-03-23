@@ -31,9 +31,10 @@ class FindContacts extends Component
     }
 
 
+    // Physical Address is from the customers table 
+    // Service Address is from the contacts table
     public function fuzzySearch()
     {
-
         $this->possibleContacts = [
             'byName' => [],
             'byAddress' => [],

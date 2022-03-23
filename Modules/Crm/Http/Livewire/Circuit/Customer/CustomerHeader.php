@@ -47,6 +47,15 @@ class CustomerHeader extends Component
         $this->approvalModal = false;
     }
 
+    public function pplApprove()
+    {
+        $this->customer->update([
+            'permission_status' => 'PPL Approved'
+        ]);
+
+        $this->approvalModal = false;
+    }
+
     public function refusal()
     {
         $this->customer->update([
