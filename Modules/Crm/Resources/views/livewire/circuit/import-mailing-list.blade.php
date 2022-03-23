@@ -61,7 +61,7 @@
                     <option value="unit">Unit</option>
                     <option value="last_name">Last Name</option>
                     <option value="physical_address">Service Address</option>
-                    <option value="physcial_city">Service City</option>
+                    <option value="physical_city">Service City</option>
                 </select>
 
                 <label for="paginate" class="block text-sm font-medium text-gray-700">Show</label>
