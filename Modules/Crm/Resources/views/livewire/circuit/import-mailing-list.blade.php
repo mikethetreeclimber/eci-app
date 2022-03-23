@@ -40,19 +40,30 @@
         <ul role="list" class="divide-y divide-gray-200">
 
             <div class="sm:flex justify-center items-center space-y-2 m-2 sm:space-x-4 sm:m-4">
-                    @if ($customers)
-                        <label for="permissionStatus" class="block text-sm font-medium text-gray-700">Sort By</label>
-                        <select wire:model="permissionStatus" id="permissionStatus" name="permissionStatus"
-                            class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
-                            <option value="Approved">Approved</option>
-                            <option value="">Not Approved</option>
-                            <option value="PPL Approved">PPL Approved</option>
-                            <option value="Refused">Refused</option>
-                            <option value="No Contact">No Contact</option>
-                            <option value="Defered">Defered</option>
-                            <option value="Show All">Show All</option>
-                        </select>
-                    @endif
+                @if ($customers)
+                    <label for="permissionStatus" class="block text-sm font-medium text-gray-700">Sort By</label>
+                    <select wire:model="permissionStatus" id="permissionStatus" name="permissionStatus"
+                        class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
+                        <option value="Approved">Approved</option>
+                        <option value="">Not Approved</option>
+                        <option value="PPL Approved">PPL Approved</option>
+                        <option value="Refused">Refused</option>
+                        <option value="No Contact">No Contact</option>
+                        <option value="Defered">Defered</option>
+                        <option value="Show All">Show All</option>
+                    </select>
+                @endif
+
+                <label for="orderBy" class="block text-sm font-medium text-gray-700">Order By</label>
+                <select wire:model="orderBy" id="orderBy" name="orderBy"
+                    class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
+                    <option value="station_name">Station Name</option>
+                    <option value="unit">Unit</option>
+                    <option value="last_name">Last Name</option>
+                    <option value="physical_address">Service Address</option>
+                    <option value="physcial_city">Service City</option>
+                </select>
+
                 <label for="paginate" class="block text-sm font-medium text-gray-700">Show</label>
                 <select wire:model="paginate" id="paginate" name="paginate"
                     class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">

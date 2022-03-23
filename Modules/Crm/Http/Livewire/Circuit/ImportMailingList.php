@@ -26,7 +26,7 @@ class ImportMailingList extends Component
     public Circuit $circuit;
     public $importingContacts;
     public $permissionStatus = '';
-    public $orderBy = 'last_name';
+    public $orderBy = 'station_name';
     public $searchBy = 'last_name';
     public $orderDirection = 'ASC';
     public $confirmDestroyCustomers = false;
