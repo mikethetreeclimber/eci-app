@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Crm\Http\Controllers\CrmController;
+use Modules\Crm\Http\Controllers\MailingListImportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +17,14 @@ use Modules\Crm\Http\Controllers\CrmController;
 
 Route::middleware('auth')
     ->prefix('crm')->as('crm.')
-        ->group(function() {
-            Route::get('/', [CrmController::class, 'index'])->name('index');
-            Route::get('circuit/{circuit}', [CrmController::class, 'show'])->name('show');
-            Route::get('circuit/{circuit}/customer/{customer}', [CrmController::class, 'showCustomer'])->name('customer.show');
-});
+    ->group(function () {
+        Route::post('/mailing_list_import', [MailingListImportController::class, 'import'])
+            ->name('mailing_list_import');
+
+        Route::get('/', [CrmController::class, 'index'])
+            ->name('index');
+        Route::get('circuit/{circuit}', [CrmController::class, 'show'])
+            ->name('show');
+        Route::get('circuit/{circuit}/customer/{customer}', [CrmController::class, 'showCustomer'])
+            ->name('customer.show');
+    });
