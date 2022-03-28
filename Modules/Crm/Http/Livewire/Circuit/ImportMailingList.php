@@ -75,6 +75,7 @@ class ImportMailingList extends Component
     {
         $file = Storage::put('/public', $this->mailing);
         Excel::import(new MailingListImport($this->circuit), $file);
+        $this->mailing->delete();
         // dd($this->mailing->get());
         // $file = Storage::put('/public', $this->mailing);
         // Excel::import(new MailingListImport($this->circuit),  $this->mailing->get());
