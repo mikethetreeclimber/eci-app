@@ -1,5 +1,19 @@
 <div>
-    <!-- This example requires Tailwind CSS v2.0+ -->
+    @if($circuit)
+    <x-confirmation-modal wire:model="confirmDestroyCircuit">
+        <x-slot:title>
+            Destroy Circuit {{ $circuit['circuit_name'] }}
+        </x-slot:title>
+        <x-slot:content>Are You Sure? This cannot be undone </x-slot:content>
+        <x-slot:footer>
+            <div class="space-x-2">
+                <x-danger-button type="button" wire:click="$set('confirmDestroyCircuit', false)">Cancel
+                </x-danger-button>
+                <x-button wire:click="delete">Confim</x-button>
+            </div>
+        </x-slot:footer>
+    </x-confirmation-modal>
+    @endif
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block w-full sm:px-6 lg:px-8">
@@ -15,7 +29,7 @@
                                     <span class="sr-only">view</span>
                                 </th>
                                 <th scope="col" class="relative px-6 py-3">
-                                    <span class="sr-only">archive</span>
+                                    <span class="sr-only">delete</span>
                                 </th>
                             </tr>
                         </thead>
@@ -40,10 +54,9 @@
                                         </a>
                                     </td>
                                     <td class="px-3 py-2 whitespace-nowrap text-right text-sm font-medium">
-                                        <button type="button" wire:click='archive({{ $circuit['id'] }})'
-                                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                            Archive
-                                        </button>
+                                        <x-danger-button wire:click="confirmDelete({{ $circuit['id'] }})" >
+                                            Delete
+                                        </x-danger-button>
                                     </td>
                                 </tr>
 

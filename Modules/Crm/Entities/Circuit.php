@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Circuit extends Model
 {
-    use SoftDeletes;
-
     protected $guarded = [];
 
     public function user()

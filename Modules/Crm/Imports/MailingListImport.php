@@ -18,9 +18,9 @@ class MailingListImport implements ToModel, WithHeadingRow
     public $circuitId;
     public $importStart;
 
-    public function __construct($circuitId)
+    public function __construct(Circuit $circuit)
     {
-        $this->circuitId = Circuit::find($circuitId)->id;
+        $this->circuitId = $circuit->id;
         $this->importStart = now();
     }
 
