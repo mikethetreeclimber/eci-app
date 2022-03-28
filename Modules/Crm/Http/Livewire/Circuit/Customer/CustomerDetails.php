@@ -7,6 +7,7 @@ use Modules\Crm\Entities\Customers;
 
 class CustomerDetails extends Component
 {
+    public $circuit;
     public $customer;
     public $stationData;
     
@@ -42,6 +43,7 @@ class CustomerDetails extends Component
     public function render()
     {
         $stationData = Customers::select('id', 'station_name', 'unit', 'permission_status')
+        ->where('circuit_id', $this->circuit->id)
         ->where('first_name', $this->customer->first_name)
         ->where('last_name', $this->customer->last_name)
         ->where('mailing_address', $this->customer->mailing_address)

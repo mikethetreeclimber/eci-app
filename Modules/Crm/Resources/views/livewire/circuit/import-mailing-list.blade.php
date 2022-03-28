@@ -11,10 +11,8 @@
 
             <div class="mt-3 sm:mt-0 sm:ml-4">
                 <form action="{{ route('crm.mailing_list_import') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
                     <label for="mailing"
                         class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-800 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        <span class="text-base-300">Import Mailing List</span>
                         <input type="hidden" name="circuit" value="{{ $circuit->id }}">
                         <input name="mailing" id="mailing" type="file" />
                         <x-button type="submit">Submit</x-button>
@@ -173,7 +171,4 @@
 
         </div>
     @endif
-
-
-
 </div>
