@@ -11,15 +11,22 @@
 
             <div class="mt-3 sm:mt-0 sm:ml-4">
 
-                <input type="file" id="file_upload" onchange="upload()" />
+                @if (!empty($customers->all()))
+                    <div class="mr-6 space-y-2">
+                        <x-danger-button wire:click="$set('confirmDestroyCustomers', true)">Destroy Customers To Import a New Mailing List</x-danger-button>
+                    </div>
+                @else
+                    <label for="mailing"
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-800 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <span class="mr-2">Import Mailing List</span>
+                        <input type="file" id="file_upload" onchange="upload()" />
+                    </label>
+                @endif
+
+
                 {{-- <button onclick="upload()">Upload</button> --}}
                 {{-- <input type="file" id="my_file_input" />
-                <div id='my_file_output'></div>
-                <label for="mailing"
-                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-800 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                    <span class="text-base-300">Import Mailing List</span>
-                    <input wire:model="mailing" id="mailing" type="file" class="sr-only" />
-                </label> --}}
+                <div id='my_file_output'></div> --}}
             </div>
             {{-- FIXME: remove this once master list is able to process --}}
             {{-- <div class="mt-3 sm:mt-0 sm:ml-4">
@@ -48,10 +55,7 @@
         <ul role="list" class="divide-y divide-gray-200">
 
             <div class="sm:flex justify-center items-center m-2 sm:space-x-4 sm:m-4">
-                <div class="mr-6 space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Delete Customers</label>
-                    <x-danger-button wire:click="$set('confirmDestroyCustomers', true)">Destroy</x-danger-button>
-                </div>
+
                 <div>
                     <label for="permissionStatus" class="block text-sm font-medium text-gray-700">Sort By</label>
                     <select wire:model="permissionStatus" id="permissionStatus" name="permissionStatus"
@@ -220,7 +224,7 @@
                         // var resultEle=document.getElementById("json-result");
                         // resultEle.value=JSON.stringify(result, null, 4);
                         // resultEle.style.display='block';
-                       @this.set('mailingListUpload', result);
+                        @this.set('mailingListUpload', result);
                     }
                 } catch (e) {
                     console.error(e);
