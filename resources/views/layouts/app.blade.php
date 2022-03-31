@@ -16,6 +16,7 @@
         @livewireStyles
 
         <!-- Scripts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.min.js"></script>
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
@@ -42,7 +43,7 @@
         </div>
 
         @stack('modals')
-
         @livewireScripts
+        @stack('scripts')
     </body>
 </html>

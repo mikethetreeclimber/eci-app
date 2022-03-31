@@ -1,7 +1,7 @@
 <div class="m-4 space-y-4">
-    <div wire:loading.delay="mailing">
+    {{-- <div wire:loading.delay="mailing">
         <x-loading />
-    </div>
+    </div> --}}
     <div class="pb-5 border-b border-green-200 sm:flex sm:items-center sm:justify-between">
         <h3 class="text-2xl font-bold text-gray-900 truncate">
             {{ $circuit->circuit_name }}
@@ -10,19 +10,16 @@
             <x-input-error for="mailing" />
 
             <div class="mt-3 sm:mt-0 sm:ml-4">
-                {{-- <form action="{{ route('crm.mailing_list_import') }}" method="POST" enctype="multipart/form-data">
-                    <label for="mailing"
-                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-800 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        <input type="hidden" name="circuit" value="{{ $circuit->id }}">
-                        <input name="mailing" id="mailing" type="file" />
-                        <x-button type="submit">Submit</x-button>
-                    </label>
-                </form> --}}
+
+                <input type="file" id="file_upload" />
+                <button onclick="upload()">Upload</button>
+                {{-- <input type="file" id="my_file_input" />
+                <div id='my_file_output'></div>
                 <label for="mailing"
-                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-800 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                <span class="text-base-300">Import Mailing List</span>
-                <input wire:model="mailing" id="mailing" type="file" class="sr-only" />
-            </label>
+                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-800 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    <span class="text-base-300">Import Mailing List</span>
+                    <input wire:model="mailing" id="mailing" type="file" class="sr-only" />
+                </label> --}}
             </div>
             {{-- FIXME: remove this once master list is able to process --}}
             {{-- <div class="mt-3 sm:mt-0 sm:ml-4">
@@ -176,4 +173,56 @@
 
         </div>
     @endif
+    @push('scripts')
+        <script>
+            var result = {};
+
+            // Method to upload a valid excel file
+            function upload() {
+                var files = document.getElementById('file_upload').files;
+                if (files.length == 0) {
+                    alert("Please choose any file...");
+                    return;
+                }
+                var filename = files[0].name;
+                var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
+                if (extension == '.XLS' || extension == '.XLSX') {
+                    excelFileToJSON(files[0]);
+                } else {
+                    alert("Please select a valid excel file.");
+                }
+            }
+
+            //Method to read excel file and convert it into JSON 
+            function excelFileToJSON(file) {
+                try {
+                    var reader = new FileReader();
+                    reader.readAsBinaryString(file);
+                    reader.onload = function(e) {
+
+                        var data = e.target.result;
+                        var workbook = XLSX.read(data, {
+                            type: 'binary'
+                        });
+
+                        workbook.SheetNames.forEach(function(sheetName) {
+                            var roa = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                            if (roa.length > 0) {
+                                result[sheetName] = roa;
+                            }
+                        });
+                        //   console.log(result);
+                        // //displaying the json result
+                        // var resultEle=document.getElementById("json-result");
+                        // resultEle.value=JSON.stringify(result, null, 4);
+                        // resultEle.style.display='block';
+                        Livewire.emit('setMailing', result);
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        </script>
+    @endpush
+
 </div>

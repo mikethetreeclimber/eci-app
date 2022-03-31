@@ -12,12 +12,13 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Modules\Crm\Imports\ContactListImport;
 use Modules\Crm\Imports\MailingListImport;
+use Modules\Crm\Http\Livewire\Services\AddressSanitizer;
 
 class ImportMailingList extends Component
 {
     use WithFileUploads, WithPagination;
 
-    public $mailing;
+    public $mailingListUpload;
     public $contacts;
     public $importing;
     public $search = '';
@@ -48,17 +49,28 @@ class ImportMailingList extends Component
         'search',
     ];
 
-    public function updatingMailing($value)
+    protected $listeners = [
+        'setMailing' => 'setMailing',
+        'refreshCustomerList' => '$refresh'
+    ];
+
+    // public function updatingMailing($value)
+    // {
+    //     Validator::make(
+    //         ['mailingListUpload' => $value],
+    //         ['mailingListUpload' => 'required|mimes:xls,xlsx'],
+    //     )->validate();
+    // }
+
+    public function updatedPaginate()
     {
-        Validator::make(
-            ['mailing' => $value],
-            ['mailing' => 'required|mimes:xls,xlsx'],
-        )->validate();
+        $this->resetPage();
+    }
+    public function updatedSearch()
+    {
+        $this->resetPage();
     }
 
-    public function updatedPaginate() { $this->resetPage(); }
-    public function updatedSearch() { $this->resetPage(); }
-    
     public function confirmDestroyCustomers()
     {
         $this->confirmDestroyCustomers = true;
@@ -67,15 +79,44 @@ class ImportMailingList extends Component
     public function destroyCustomers()
     {
         Customers::where('circuit_id', '=', $this->circuit->id)->delete();
-            
+
         $this->confirmDestroyCustomers = false;
     }
 
-    public function updatedMailing()
+    public function setMailing($uploadedMailingList)
     {
-        $file = Storage::put('/public', $this->mailing);
-        Excel::import(new MailingListImport($this->circuit), $file);
-        $this->mailing->delete();
+        // $this->mailingListUpload = $uploadedMailingList;
+        foreach ($uploadedMailingList as $key => $array) {
+            foreach ($array as $key => $row) {
+                if ($row['LASTNAME'] !== null && $row['MAILING ADDRESS'] !== null) {
+                    Customers::create([
+                        'circuit_id' => $this->circuit->id,
+                        'title' => $row['Title'],
+                        'work_order' => $row['Work Order'],
+                        'first_name' => $row['FIRSTNAME'],
+                        'last_name' => $row['LASTNAME'],
+                        'mailing_address' => AddressSanitizer::sanitize($row['MAILING ADDRESS']),
+                        'city' => $row['CITY'],
+                        'state' => $row['STATE'],
+                        'physical_address' => AddressSanitizer::sanitize($row['PHYSICAL ADDRESS']),
+                        'physical_city' => $row['PHYSICAL CITY'],
+                        'physical_state' => $row['PHYSICAL STATE'],
+                        'station_name' => $row['Station Name'],
+                        'unit' => $row['Unit'],
+                        'permission_status' => ucwords($row['Permission Status']),
+                        'assessed_date' => $row['Assessed Date'],
+                        'imported_at' => NULL
+                    ]);
+                }
+            }
+        }
+
+        $this->emit('refreshCustomerList');
+
+
+        // $file = Storage::put('/public', $this->mailingListUpload);
+        // Excel::import(new MailingListImport($this->circuit), $file);
+        // $this->mailing->delete();
         // dd($this->mailing->get());
         // $file = Storage::put('/public', $this->mailing);
         // Excel::import(new MailingListImport($this->circuit),  $this->mailing->get());
@@ -97,7 +138,7 @@ class ImportMailingList extends Component
 
     public function render()
     {
-        if ( $this->permissionStatus === 'Show All') {
+        if ($this->permissionStatus === 'Show All') {
             $customers = Customers::where('circuit_id', '=', $this->circuit->id)
                 ->search($this->searchBy, $this->search)
                 ->orderBy($this->orderBy, $this->orderDirection)
@@ -111,7 +152,7 @@ class ImportMailingList extends Component
         }
 
         $customerCount = Customers::where('circuit_id', '=', $this->circuit->id)
-                ->count();
+            ->count();
         return view('crm::livewire.circuit.import-mailing-list', compact('customers', 'customerCount'));
     }
 }
