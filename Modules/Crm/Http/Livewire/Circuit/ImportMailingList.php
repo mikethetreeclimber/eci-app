@@ -114,10 +114,41 @@ class ImportMailingList extends Component
         $this->emit('refreshCustomerList');
 
 
-        // $file = Storage::put('/public', $this->mailingListUpload);
+       
+    }
+
+    public function updatedMailingListUpload() 
+    {
+
+        $importedAt = now();
+        foreach ($this->mailingListUpload as $key => $array) {
+            foreach ($array as $key => $row) {
+                if ($row['LASTNAME'] !== null && $row['MAILING ADDRESS'] !== null) {
+                    Customers::create([
+                        'circuit_id' => $this->circuit->id,
+                        'title' => $row['Title'],
+                        'work_order' => $row['Work Order'],
+                        'first_name' => $row['FIRSTNAME'],
+                        'last_name' => $row['LASTNAME'],
+                        'mailing_address' => AddressSanitizer::sanitize($row['MAILING ADDRESS']),
+                        'city' => $row['CITY'],
+                        'state' => $row['STATE'],
+                        'physical_address' => AddressSanitizer::sanitize($row['PHYSICAL ADDRESS']),
+                        'physical_city' => $row['PHYSICAL CITY'],
+                        'physical_state' => $row['PHYSICAL STATE'],
+                        'station_name' => $row['Station Name'],
+                        'unit' => $row['Unit'],
+                        'permission_status' => ucwords($row['Permission Status']),
+                        'assessed_date' => $row['Assessed Date'],
+                        'imported_at' => $importedAt
+                    ]);
+                }
+            }
+        }
+
+         // $file = Storage::put('/public', $this->mailingListUpload);
         // Excel::import(new MailingListImport($this->circuit), $file);
         // $this->mailing->delete();
-        // dd($this->mailing->get());
         // $file = Storage::put('/public', $this->mailing);
         // Excel::import(new MailingListImport($this->circuit),  $this->mailing->get());
     }

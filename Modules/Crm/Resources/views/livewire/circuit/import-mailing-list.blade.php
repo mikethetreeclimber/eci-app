@@ -11,7 +11,7 @@
 
             <div class="mt-3 sm:mt-0 sm:ml-4">
 
-                <input type="file" id="file_upload" onchange="upload()"/>
+                <input type="file" id="file_upload" onchange="upload()" />
                 {{-- <button onclick="upload()">Upload</button> --}}
                 {{-- <input type="file" id="my_file_input" />
                 <div id='my_file_output'></div>
@@ -179,7 +179,7 @@
 
     @push('scripts')
         <script>
-            // var result = {};
+            var result = {};
 
             // Method to upload a valid excel file
             function upload() {
@@ -197,7 +197,36 @@
                 }
             }
 
-            // //Method to read excel file and convert it into JSON 
+            //Method to read excel file and convert it into JSON 
+            function excelFileToJSON(file) {
+                try {
+                    var reader = new FileReader();
+                    reader.readAsBinaryString(file);
+                    reader.onload = function(e) {
+
+                        var data = e.target.result;
+                        var workbook = XLSX.read(data, {
+                            type: 'binary'
+                        });
+
+                        workbook.SheetNames.forEach(function(sheetName) {
+                            var roa = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                            if (roa.length > 0) {
+                                result[sheetName] = roa;
+                            }
+                        });
+                        //   console.log(result);
+                        // //displaying the json result
+                        // var resultEle=document.getElementById("json-result");
+                        // resultEle.value=JSON.stringify(result, null, 4);
+                        // resultEle.style.display='block';
+                       @this.set('mailingListUpload', result);
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+
             // function excelFileToJSON(file) {
             //     try {
             //         var reader = new FileReader();
@@ -208,51 +237,22 @@
             //             var workbook = XLSX.read(data, {
             //                 type: 'binary'
             //             });
-
+            //             var result = {};
             //             workbook.SheetNames.forEach(function(sheetName) {
             //                 var roa = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
             //                 if (roa.length > 0) {
             //                     result[sheetName] = roa;
             //                 }
             //             });
-            //             //   console.log(result);
-            //             // //displaying the json result
-            //             // var resultEle=document.getElementById("json-result");
-            //             // resultEle.value=JSON.stringify(result, null, 4);
-            //             // resultEle.style.display='block';
-            //             Livewire.emit('setMailing', result);
+            //             //displaying the json result
+            //             var resultEle = document.getElementById("json-result");
+            //             resultEle.value = JSON.stringify(result, null, 4);
+            //             resultEle.style.display = 'block';
             //         }
             //     } catch (e) {
             //         console.error(e);
             //     }
             // }
-
-            function excelFileToJSON(file){
-          try {
-            var reader = new FileReader();
-            reader.readAsBinaryString(file);
-            reader.onload = function(e) {
- 
-                var data = e.target.result;
-                var workbook = XLSX.read(data, {
-                    type : 'binary'
-                });
-                var result = {};
-                workbook.SheetNames.forEach(function(sheetName) {
-                var roa = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-                if (roa.length > 0) {
-                    result[sheetName] = roa;
-                }
-              });
-                //displaying the json result
-                var resultEle=document.getElementById("json-result");
-                resultEle.value=JSON.stringify(result, null, 4);
-                resultEle.style.display='block';
-                }
-            }catch(e){
-                console.error(e);
-            }
-      }
         </script>
     @endpush
 
