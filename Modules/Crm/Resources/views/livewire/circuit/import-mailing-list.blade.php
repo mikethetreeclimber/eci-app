@@ -1,19 +1,19 @@
 <div class="m-4 space-y-4">
-    {{-- <div wire:loading.delay="mailing">
+    <div wire:loading.delay="mailingListUpload">
         <x-loading />
-    </div> --}}
+    </div> 
     <div class="pb-5 border-b border-green-200 sm:flex sm:items-center sm:justify-between">
         <h3 class="text-2xl font-bold text-gray-900 truncate">
             {{ $circuit->circuit_name }}
         </h3>
         <div class="flex space-x-4">
-            {{-- <x-input-error for="mailing" /> --}}
 
             <div class="mt-3 sm:mt-0 sm:ml-4">
 
                 @if (!empty($customers->all()))
                     <div class="mr-6 space-y-2">
-                        <x-danger-button wire:click="$set('confirmDestroyCustomers', true)">Destroy Customers To Import a New Mailing List</x-danger-button>
+                        <x-danger-button wire:click="$set('confirmDestroyCustomers', true)">Destroy Customers To Import
+                            a New Mailing List</x-danger-button>
                     </div>
                 @else
                     <label for="mailing"
@@ -21,21 +21,11 @@
                         <span class="mr-2">Import Mailing List</span>
                         <input type="file" id="file_upload" onchange="upload()" />
                     </label>
+                    <x-input-error for="mailingListUpload" />
                 @endif
 
-
-                {{-- <button onclick="upload()">Upload</button> --}}
-                {{-- <input type="file" id="my_file_input" />
-                <div id='my_file_output'></div> --}}
             </div>
-            {{-- FIXME: remove this once master list is able to process --}}
-            {{-- <div class="mt-3 sm:mt-0 sm:ml-4">
-                <label for="contacts"
-                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-800 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                    <span class="text-base-300">Import Contact List</span>
-                    <input wire:model="contacts" id="contacts" type="file" class="sr-only" />
-                </label>
-            </div> --}}
+            
         </div>
     </div>
     <x-confirmation-modal wire:model="confirmDestroyCustomers">

@@ -153,20 +153,6 @@ class ImportMailingList extends Component
         // Excel::import(new MailingListImport($this->circuit),  $this->mailing->get());
     }
 
-    public function updatingContacts($value)
-    {
-        Validator::make(
-            ['contacts' => $value],
-            ['contacts' => 'required|mimes:xls,xlsx'],
-        )->validate();
-    }
-
-    public function updatedContacts()
-    {
-        $file = Storage::put('/public', $this->contacts);
-        Excel::import(new ContactListImport(), $file);
-    }
-
     public function render()
     {
         if ($this->permissionStatus === 'Show All') {
