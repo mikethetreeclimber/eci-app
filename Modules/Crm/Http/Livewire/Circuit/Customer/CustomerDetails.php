@@ -53,7 +53,6 @@ class CustomerDetails extends Component
 
         $this->stationData = collect($stationData)->groupBy('unit');
 
-        dd($this->customer);
         return view('crm::livewire.circuit.customer.customer-details', compact('stationData'));
     }
 }
