@@ -4,4 +4,8 @@
         <span class="text-base-300">Import Contact List</span>
         <input wire:model="contacts" id="contacts" type="file" class="sr-only" />
     </label>
+    {{-- {{ $workOrder }}
+    <x-button type="button" wire:click="searchWorkOrder"> Search Work Order</x-button> --}}
 </div>
+
+

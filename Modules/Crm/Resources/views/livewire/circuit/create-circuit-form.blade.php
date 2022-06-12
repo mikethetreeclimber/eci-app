@@ -21,7 +21,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-6 md:col-span-3 grid grid-cols-3 gap-6">
+            {{-- <div class="col-span-6 md:col-span-3 grid grid-cols-3 gap-6">
                 <div class="col-span-3 ">
                     <label for="city" class="block text-sm font-medium text-gray-700"> Circuit Town/City </label>
                     <div class="mt-1 flex rounded-md shadow-sm">
@@ -30,7 +30,7 @@
                             placeholder="Town/City">
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
         </x-slot>
 

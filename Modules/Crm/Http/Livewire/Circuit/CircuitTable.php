@@ -10,6 +10,7 @@ class CircuitTable extends Component
 {
     public $circuit;
     public $circuits;
+    public $createCircuit = false;
     public $confirmDestroyCircuit = false;
     protected $listeners = [
         'refreshCircuitTable' => '$refresh'
@@ -23,9 +24,9 @@ class CircuitTable extends Component
     public function checkForCircuits()
     {
         $this->circuits = Circuit::where('user_id', '=', auth()->id())
-        ->orderBy('created_at', 'DESC')
-        // ->restore();
-        ->get()->toArray();
+            ->orderBy('created_at', 'DESC')
+            // ->restore();
+            ->get()->toArray();
     }
 
     public function confirmDelete(Circuit $circuit)

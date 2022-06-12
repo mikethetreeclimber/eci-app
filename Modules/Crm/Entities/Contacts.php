@@ -9,7 +9,18 @@ class Contacts extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
-    
-
+    protected $fillable = [
+        "region",
+        "feeder_id",
+        "substation_name",
+        "customer_name",
+        "service_address",
+        "mailing_address",
+        "primary_phone",
+        "alt_phone",
+        "email_address",
+        "revenue_class_desc",
+        "created_at",
+        "updated_at",
+    ];
 }

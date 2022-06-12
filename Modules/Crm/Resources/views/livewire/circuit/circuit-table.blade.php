@@ -1,19 +1,43 @@
 <div>
-    @if($circuit)
-    <x-confirmation-modal wire:model="confirmDestroyCircuit">
-        <x-slot:title>
-            Destroy Circuit {{ $circuit['circuit_name'] }}
-        </x-slot:title>
-        <x-slot:content>Are You Sure? This cannot be undone </x-slot:content>
-        <x-slot:footer>
-            <div class="space-x-2">
-                <x-danger-button type="button" wire:click="$set('confirmDestroyCircuit', false)">Cancel
-                </x-danger-button>
-                <x-button wire:click="delete">Confim</x-button>
-            </div>
-        </x-slot:footer>
-    </x-confirmation-modal>
+    @if ($circuit)
+        <x-confirmation-modal wire:model="confirmDestroyCircuit">
+            <x-slot:title>
+                Destroy Circuit {{ $circuit['circuit_name'] }}
+            </x-slot:title>
+            <x-slot:content>Are You Sure? This cannot be undone </x-slot:content>
+            <x-slot:footer>
+                <div class="space-x-2">
+                    <x-danger-button type="button" wire:click="$set('confirmDestroyCircuit', false)">Cancel
+                    </x-danger-button>
+                    <x-button wire:click="delete">Confim</x-button>
+                </div>
+            </x-slot:footer>
+        </x-confirmation-modal>
     @endif
+    @if ($createCircuit)
+        <x-dialog-modal wire:model="createCircuit">
+            <x-slot:title>
+                Create Circuit
+            </x-slot:title>
+            <x-slot:content>
+                <livewire:crm::circuit.create-circuit-form />
+            </x-slot:content>
+            <x-slot:footer>
+                <button wire:click="$set('createCircuit', false)"></button>
+
+            </x-slot:footer>
+        </x-dialog-modal>
+    @endif
+    <div class="sm:flex sm:items-center sm:justify-evenly mb-6">
+        <div class="sm:flex-auto">
+            <h1 class="text-xl font-semibold text-gray-900">Circuits</h1>
+            <p class="mt-2 text-sm text-gray-700">A list of all the circuits.</p>
+        </div>
+        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <x-button wire:click="$set('createCircuit', true)" type="button" >Add
+                circuit</x-button>
+        </div>
+    </div>
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block w-full sm:px-6 lg:px-8">
@@ -54,7 +78,7 @@
                                         </a>
                                     </td>
                                     <td class="px-3 py-2 whitespace-nowrap text-right text-sm font-medium">
-                                        <x-danger-button wire:click="confirmDelete({{ $circuit['id'] }})" >
+                                        <x-danger-button wire:click="confirmDelete({{ $circuit['id'] }})">
                                             Delete
                                         </x-danger-button>
                                     </td>

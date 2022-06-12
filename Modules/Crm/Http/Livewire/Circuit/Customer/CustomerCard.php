@@ -26,6 +26,7 @@ class CustomerCard extends Component
     
     public function render()
     {
+        dd($this->customer);
         return view('crm::livewire.circuit.customer.customer-card');
     }
 }
