@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Dashboard') }}
             </h2>
-            <div class="mt-3 sm:mt-0 sm:ml-4">
+            {{-- <div class="mt-3 sm:mt-0 sm:ml-4">
                 <label for="mobile-search-candidate" class="sr-only">Search</label>
                 <label for="desktop-search-candidate" class="sr-only">Search</label>
                 <div class="flex rounded-md shadow-sm">
@@ -43,7 +43,7 @@
                         </svg>
                     </button>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </x-slot>
 

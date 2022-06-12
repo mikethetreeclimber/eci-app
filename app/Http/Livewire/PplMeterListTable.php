@@ -120,6 +120,7 @@ final class PplMeterListTable extends PowerGridComponent
             Column::make('REGION', 'region')
                 ->sortable()
                 ->searchable()
+                ->makeInputText()
                 ->hidden(true, false),
 
             Column::make('CUSTOMER NAME', 'customer_name')
